@@ -1,0 +1,40 @@
+   1              	# 0 "./src/max.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1430-max//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Write a program to compute the maximum of the values in R1 and R2
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14 0000 9142     	  CMP R1, R2
+  15 0002 01DB     	  BLT ElseMaxB
+  16 0004 0846     	  MOV R0, R1
+  17 0006 00E0     	  B   EndMax
+  18              	ElseMaxB:
+  19 0008 0846     	  MOV R0, R1
+  20              	EndMax:
+  21              	
+  22              	  @ End of program ... check your result
+  23              	
+  24              	End_Main:
+  25 000a 7047     	  BX    LR
+  26              	
+  27              	  .end...
+DEFINED SYMBOLS
+         ./src/max.s:8      .text:0000000000000000 Main
+         ./src/max.s:14     .text:0000000000000000 $t
+         ./src/max.s:18     .text:0000000000000008 ElseMaxB
+         ./src/max.s:20     .text:000000000000000a EndMax
+         ./src/max.s:24     .text:000000000000000a End_Main
+
+NO UNDEFINED SYMBOLS

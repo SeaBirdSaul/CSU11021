@@ -1,0 +1,50 @@
+   1              	# 0 "./src/fibonacci.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1450-fibonacci//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Calculate Fibonacci number Fn, where n is stored in R1
+  11              	  @ Store the result in R0
+  12              	
+  13              	  @ *** your solution goes here ***
+  14              	  
+  15              	
+  16 0000 4FF00004 	  MOV R4, #0
+  17 0004 4FF00005 	  MOV R5, #0
+  18 0008 4FF00100 	  MOV R0, #1
+  19 000c 4FF00106 	  MOV R6, #1
+  20              	WhileFib:
+  21 0010 8E42     	  CMP R6, R1
+  22 0012 06D2     	  BHS EndWhFib
+  23 0014 2C46     	  MOV R4, R5
+  24 0016 0546     	  MOV R5, R0
+  25 0018 06F10106 	  ADD R6, R6, #1
+  26 001c 05EB0400 	  ADD R0, R5, R4
+  27 0020 F6E7     	  B   WhileFib
+  28              	
+  29              	EndWhFib:
+  30              	
+  31              	
+  32              	  @ End of program ... check your result
+  33              	
+  34              	End_Main:
+  35 0022 7047     	  BX    LR
+  36              	
+  37              	  .end...
+DEFINED SYMBOLS
+   ./src/fibonacci.s:8      .text:0000000000000000 Main
+   ./src/fibonacci.s:16     .text:0000000000000000 $t
+   ./src/fibonacci.s:20     .text:0000000000000010 WhileFib
+   ./src/fibonacci.s:29     .text:0000000000000022 EndWhFib
+   ./src/fibonacci.s:34     .text:0000000000000022 End_Main
+
+NO UNDEFINED SYMBOLS

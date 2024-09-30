@@ -1,0 +1,37 @@
+   1              	# 0 "./src/abs.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1420-abs//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Write a program to compute the absolute value of an integer in R1
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	  
+  14 0000 0846     	  MOV R0, R1
+  15 0002 0028     	  CMP R0, #0
+  16 0004 01DA     	  BGE EndIfNeg
+  17 0006 C0F10000 	  RSB R0, R0, #0
+  18              	EndIfNeg:
+  19              	
+  20              	  @ End of program ... check your result
+  21              	
+  22              	End_Main:
+  23 000a 7047     	  BX    LR
+  24              	
+  25              	  .end...
+DEFINED SYMBOLS
+         ./src/abs.s:8      .text:0000000000000000 Main
+         ./src/abs.s:14     .text:0000000000000000 $t
+         ./src/abs.s:18     .text:000000000000000a EndIfNeg
+         ./src/abs.s:22     .text:000000000000000a End_Main
+
+NO UNDEFINED SYMBOLS
