@@ -1,0 +1,32 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1390-atoi//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	
+   8              	  .section  .text
+   9              	  
+  11              	Init_Test:
+  12              	
+  13              	  @ 2034 (base 10 / decimal)
+  14 0000 4FF03401 	  LDR   R1, ='4'    @ '4' = 0x34
+  15 0004 4FF04102 	  LDR   R2, ='A'    @ '3' = 0x33
+  16 0008 4FF03103 	  LDR   R3, ='1'    @ '0' = 0x30
+  17 000c 4FF03004 	  LDR   R4, ='0'    @ '2' = 0x32
+  18              	
+  19 0010 4FF01005 	  LDR   R5, =16    @ base 10 / decimal
+  20              	
+  21 0014 7047     	  bx    lr
+  22              	
+  23              	.end
+DEFINED SYMBOLS
+        ./src/test.s:11     .text:0000000000000000 Init_Test
+        ./src/test.s:14     .text:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS

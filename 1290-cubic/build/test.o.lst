@@ -1,0 +1,30 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1290-cubic//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .thumb
+   4              	
+   5              	  .global  Init_Test
+   6              	
+   7              	  .section  .text
+   8              	
+  10              	Init_Test:
+  11              	
+  12              	  @ Test with x=3, a=2, b=-5, c=4 and d=10
+  13 0000 4FF00301 	  MOV   R1, #3
+  14 0004 4FF00202 	  MOV   R2, #2
+  15 0008 6FF00403 	  MOV   R3, #-5
+  16 000c 4FF00404 	  MOV   R4, 4
+  17 0010 4FF00A05 	  MOV   R5, #10
+  18              	
+  19 0014 7047     	  bx    lr
+  20              	
+  21              	.end...
+DEFINED SYMBOLS
+        ./src/test.s:10     .text:0000000000000000 Init_Test
+        ./src/test.s:13     .text:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS

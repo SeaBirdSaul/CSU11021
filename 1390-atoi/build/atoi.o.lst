@@ -1,0 +1,246 @@
+   1              	# 0 "./src/atoi.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1390-atoi//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 2
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14              	
+  15 0000 102D     	  CMP R5, #16
+  16 0002 08D0     	  BEQ Hex
+  17 0004 022D     	  CMP R5, #2
+  18 0006 00F08A80 	  BEQ Binary
+  19 000a 082D     	  CMP R5, #8
+  20 000c 00F09280 	  BEQ Oct
+  21 0010 0A2D     	  CMP R5, #10
+  22 0012 00F09A80 	  BEQ Dec
+  23              	
+  24              	@hex to decimal - inputted hex must convert to decimal (a-f)
+  25              	Hex: 
+  26 0016 4FF03006 	  MOV R6, 0x30
+  27              	@A-65 B-66 C-67 D-68 E-69 F-70
+  28 001a A1EB0601 	  SUB R1, R1, R6 
+  29 001e A2EB0602 	  SUB R2, R2, R6
+  30 0022 A3EB0603 	  SUB R3, R3, R6
+  31 0026 A4EB0604 	  SUB R4, R4, R6 
+  32 002a FFE7     	  B   Check
+  33              	
+  34              	
+  35              	Check:
+  36 002c 1129     	  CMP R1, #17
+  37 002e 2ED0     	  BEQ R1A
+  38 0030 1229     	  CMP R1, #18
+  39 0032 2FD0     	  BEQ R1B
+  40 0034 1329     	  CMP R1, #19
+  41 0036 30D0     	  BEQ R1C
+  42 0038 1429     	  CMP R1, #20
+  43 003a 31D0     	  BEQ R1D
+  44 003c 1529     	  CMP R1, #21
+  45 003e 32D0     	  BEQ R1E
+  46 0040 1629     	  CMP R1, #22
+  47 0042 33D0     	  BEQ R1F
+  48 0044 112A     	  CMP R2, #17
+  49 0046 34D0     	  BEQ R2A
+  50 0048 122A     	  CMP R2, #18
+  51 004a 35D0     	  BEQ R2B
+  52 004c 132A     	  CMP R2, #19
+  53 004e 36D0     	  BEQ R2C
+  54 0050 142A     	  CMP R2, #20
+  55 0052 37D0     	  BEQ R2D
+  56 0054 152A     	  CMP R2, #21
+  57 0056 38D0     	  BEQ R2E
+  58 0058 162A     	  CMP R2, #22
+  59 005a 39D0     	  BEQ R2F
+  60 005c 112B     	  CMP R3, #17
+  61 005e 3AD0     	  BEQ R3A
+  62 0060 122B     	  CMP R3, #18
+  63 0062 3BD0     	  BEQ R3B
+  64 0064 132B     	  CMP R3, #19
+  65 0066 3CD0     	  BEQ R3C
+  66 0068 142B     	  CMP R3, #20
+  67 006a 3DD0     	  BEQ R3D
+  68 006c 152B     	  CMP R3, #21
+  69 006e 3ED0     	  BEQ R3E
+  70 0070 162B     	  CMP R3, #22
+  71 0072 3FD0     	  BEQ R3F
+  72 0074 112C     	  CMP R4, #17
+  73 0076 40D0     	  BEQ R4A
+  74 0078 122C     	  CMP R4, #18
+  75 007a 41D0     	  BEQ R4B
+  76 007c 132C     	  CMP R4, #19
+  77 007e 42D0     	  BEQ R4C
+  78 0080 142C     	  CMP R4, #20
+  79 0082 43D0     	  BEQ R4D
+  80 0084 152C     	  CMP R4, #21
+  81 0086 44D0     	  BEQ R4E
+  82 0088 162C     	  CMP R4, #22
+  83 008a 45D0     	  BEQ R4F
+  84              	
+  85 008c 68E0     	  B   Final
+  86              	
+  87              	R1A:
+  88 008e 4FF00A01 	  MOV R1, #10
+  89 0092 CBE7     	  B   Check
+  90              	R1B:
+  91 0094 4FF00B01 	  MOV R1, #11
+  92 0098 C8E7     	  B   Check
+  93              	R1C:
+  94 009a 4FF00C01 	  MOV R1, #12
+  95 009e C5E7     	  B   Check
+  96              	R1D:
+  97 00a0 4FF00D01 	  MOV R1, #13
+  98 00a4 C2E7     	  B   Check
+  99              	R1E:
+ 100 00a6 4FF00E01 	  MOV R1, #14
+ 101 00aa BFE7     	  B   Check
+ 102              	R1F:
+ 103 00ac 4FF00F01 	  MOV R1, #15
+ 104 00b0 BCE7     	  B   Check
+ 105              	
+ 106              	R2A:
+ 107 00b2 4FF00A02 	  MOV R2, #10
+ 108 00b6 B9E7     	  B   Check
+ 109              	R2B:
+ 110 00b8 4FF00B02 	  MOV R2, #11
+ 111 00bc B6E7     	  B   Check
+ 112              	R2C:
+ 113 00be 4FF00C02 	  MOV R2, #12
+ 114 00c2 B3E7     	  B   Check
+ 115              	R2D:
+ 116 00c4 4FF00D02 	  MOV R2, #13
+ 117 00c8 B0E7     	  B   Check
+ 118              	R2E:
+ 119 00ca 4FF00E02 	  MOV R2, #14
+ 120 00ce ADE7     	  B   Check
+ 121              	R2F:
+ 122 00d0 4FF00F02 	  MOV R2, #15
+ 123 00d4 AAE7     	  B   Check
+ 124              	
+ 125              	R3A:
+ 126 00d6 4FF00A03 	  MOV R3, #10
+ 127 00da A7E7     	  B   Check
+ 128              	R3B:
+ 129 00dc 4FF00B03 	  MOV R3, #11
+ 130 00e0 A4E7     	  B   Check
+ 131              	R3C:
+ 132 00e2 4FF00C03 	  MOV R3, #12
+ 133 00e6 A1E7     	  B   Check
+ 134              	R3D:
+ 135 00e8 4FF00D03 	  MOV R3, #13
+ 136 00ec 9EE7     	  B   Check
+ 137              	R3E:
+ 138 00ee 4FF00E03 	  MOV R3, #14
+ 139 00f2 9BE7     	  B   Check
+ 140              	R3F:
+ 141 00f4 4FF00F03 	  MOV R3, #15
+ 142 00f8 98E7     	  B   Check
+ 143              	
+ 144              	R4A:
+ 145 00fa 4FF00A04 	  MOV R4, #10
+ 146 00fe 95E7     	  B   Check
+ 147              	R4B:
+ 148 0100 4FF00B04 	  MOV R4, #11
+ 149 0104 92E7     	  B   Check
+ 150              	R4C:
+ 151 0106 4FF00C04 	  MOV R4, #12
+ 152 010a 8FE7     	  B   Check
+ 153              	R4D:
+ 154 010c 4FF00D04 	  MOV R4, #13
+ 155 0110 8CE7     	  B   Check
+ 156              	R4E:
+ 157 0112 4FF00E04 	  MOV R4, #14
+ 158 0116 89E7     	  B   Check
+ 159              	R4F:
+ 160 0118 4FF00F04 	  MOV R4, #15
+ 161 011c 86E7     	  B   Check
+ 162              	
+ 163              	
+ 164              	Binary:
+ 165 011e 4FF03006 	  MOV R6, #48
+ 166              	
+ 167 0122 A1EB0601 	  SUB R1, R1, R6
+ 168 0126 A2EB0602 	  SUB R2, R2, R6
+ 169 012a A3EB0603 	  SUB R3, R3, R6
+ 170 012e A4EB0604 	  SUB R4, R4, R6 
+ 171 0132 15E0     	  B   Final
+ 172              	
+ 173              	Oct:
+ 174 0134 4FF03006 	  MOV R6, #060
+ 175              	
+ 176 0138 A1EB0601 	  SUB R1, R1, R6
+ 177 013c A2EB0602 	  SUB R2, R2, R6
+ 178 0140 A3EB0603 	  SUB R3, R3, R6
+ 179 0144 A4EB0604 	  SUB R4, R4, R6 
+ 180 0148 0AE0     	  B   Final
+ 181              	
+ 182              	Dec:
+ 183 014a 4FF03006 	  MOV R6, #48
+ 184              	
+ 185 014e A1EB0601 	  SUB R1, R1, R6
+ 186 0152 A2EB0602 	  SUB R2, R2, R6
+ 187 0156 A3EB0603 	  SUB R3, R3, R6
+ 188 015a A4EB0604 	  SUB R4, R4, R6 
+ 189 015e FFE7     	  B   Final
+ 190              	
+ 191              	Final:
+ 192 0160 2046     	  MOV R0, R4
+ 193 0162 00FB05F0 	  MUL R0, R0, R5
+ 194 0166 1844     	  ADD R0, R0, R3
+ 195 0168 00FB05F0 	  MUL R0, R0, R5
+ 196 016c 1044     	  ADD R0, R0, R2
+ 197 016e 00FB05F0 	  MUL R0, R0, R5
+ 198 0172 0844     	  ADD R0, R0, R1 
+ 199              	
+ 200              	  @ End of program ... check your result
+ 201              	
+ 202              	End_Main:
+ 203 0174 7047     	  BX    LR
+ 204              	
+ 205              	  .end...
+DEFINED SYMBOLS
+        ./src/atoi.s:8      .text:0000000000000000 Main
+        ./src/atoi.s:15     .text:0000000000000000 $t
+        ./src/atoi.s:25     .text:0000000000000016 Hex
+        ./src/atoi.s:164    .text:000000000000011e Binary
+        ./src/atoi.s:173    .text:0000000000000134 Oct
+        ./src/atoi.s:182    .text:000000000000014a Dec
+        ./src/atoi.s:35     .text:000000000000002c Check
+        ./src/atoi.s:87     .text:000000000000008e R1A
+        ./src/atoi.s:90     .text:0000000000000094 R1B
+        ./src/atoi.s:93     .text:000000000000009a R1C
+        ./src/atoi.s:96     .text:00000000000000a0 R1D
+        ./src/atoi.s:99     .text:00000000000000a6 R1E
+        ./src/atoi.s:102    .text:00000000000000ac R1F
+        ./src/atoi.s:106    .text:00000000000000b2 R2A
+        ./src/atoi.s:109    .text:00000000000000b8 R2B
+        ./src/atoi.s:112    .text:00000000000000be R2C
+        ./src/atoi.s:115    .text:00000000000000c4 R2D
+        ./src/atoi.s:118    .text:00000000000000ca R2E
+        ./src/atoi.s:121    .text:00000000000000d0 R2F
+        ./src/atoi.s:125    .text:00000000000000d6 R3A
+        ./src/atoi.s:128    .text:00000000000000dc R3B
+        ./src/atoi.s:131    .text:00000000000000e2 R3C
+        ./src/atoi.s:134    .text:00000000000000e8 R3D
+        ./src/atoi.s:137    .text:00000000000000ee R3E
+        ./src/atoi.s:140    .text:00000000000000f4 R3F
+        ./src/atoi.s:144    .text:00000000000000fa R4A
+        ./src/atoi.s:147    .text:0000000000000100 R4B
+        ./src/atoi.s:150    .text:0000000000000106 R4C
+        ./src/atoi.s:153    .text:000000000000010c R4D
+        ./src/atoi.s:156    .text:0000000000000112 R4E
+        ./src/atoi.s:159    .text:0000000000000118 R4F
+        ./src/atoi.s:191    .text:0000000000000160 Final
+        ./src/atoi.s:202    .text:0000000000000174 End_Main
+
+NO UNDEFINED SYMBOLS
