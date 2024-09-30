@@ -1,0 +1,166 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2390-sudoku//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	  .global  Main
+   8              	  .global  testGrid
+   9              	
+  10              	@
+  11              	@ Main
+  12              	@
+  13              	@ An implementation of Main to test each of our subroutines
+  14              	@ You should "comment out" all but one subroutine call
+  15              	@   to test individual subroutines as you develop them.
+  16              	@
+  17              	@ Modify the tests to suit your needs.
+  18              	@
+  19              	Main:
+  20              	
+  21 0000 00B5     	  PUSH  {LR}
+  22              	
+  23 0002 2248     	  LDR   R0, =testGrid
+  24 0004 4FF00201 	  LDR   R1, =2        @ row number
+  25 0008 4FF00502 	  LDR   R2, =5        @ value to look for
+  26 000c FFF7FEFF 	  BL    countInRow    @ countInRow(grid, row, value)
+  27              	
+  28 0010 1E48     	  LDR   R0, =testGrid
+  29 0012 4FF00801 	  LDR   R1, =8        @ row number
+  30 0016 4FF00902 	  LDR   R2, =9        @ value to look for
+  31 001a FFF7FEFF 	  BL    countInRow    @ countInRow(grid, row, value)
+  32              	
+  33 001e 1B48     	  LDR   R0, =testGrid
+  34 0020 4FF00001 	  LDR   R1, =0        @ column number
+  35 0024 4FF00902 	  LDR   R2, =9        @ value to look for
+  36 0028 FFF7FEFF 	  BL    countInCol    @ countInCol(grid, row, value)
+  37              	
+  38 002c 1748     	  LDR   R0, =testGrid
+  39 002e 4FF00601 	  LDR   R1, =6        @ column number
+  40 0032 4FF00102 	  LDR   R2, =1        @ value to look for
+  41 0036 FFF7FEFF 	  BL    countInCol    @ countInCol(grid, row, value)
+  42              	
+  43 003a 1448     	  LDR   R0, =testGrid
+  44 003c 4FF00301 	  LDR   R1, =3        @ row number
+  45 0040 4FF00602 	  LDR   R2, =6        @ column number
+  46 0044 4FF00103 	  LDR   R3, =1        @ value to look for
+  47 0048 FFF7FEFF 	  BL    countIn3x3    @ countIn3x3(grid, row, col, value)
+  48              	
+  49 004c 0F48     	  LDR   R0, =testGrid
+  50 004e 4FF00801 	  LDR   R1, =8        @ row number
+  51 0052 4FF00402 	  LDR   R2, =4        @ column number
+  52 0056 4FF00203 	  LDR   R3, =2        @ value to look for
+  53 005a FFF7FEFF 	  BL    countIn3x3    @ countIn3x3(grid, row, col, value)
+  54              	
+  55 005e 0B48     	  LDR   R0, =testGrid
+  56 0060 4FF00101 	  LDR   R1, =1        @ row number
+  57 0064 4FF00702 	  LDR   R2, =7        @ column number
+  58 0068 FFF7FEFF 	  BL    nextInCell    @ nextInCell(grid, row, col)
+  59              	
+  60 006c 0748     	  LDR   R0, =testGrid
+  61 006e 4FF00601 	  LDR   R1, =6        @ row number
+  62 0072 4FF00002 	  LDR   R2, =0        @ column number
+  63 0076 FFF7FEFF 	  BL    nextInCell    @ nextInCell(grid, row, col)
+  64              	
+  65              	  @
+  66              	  @ Finally, let's try to solve the puzzle ...
+  67              	  @ (The initial call to the resursive solveSudoku subroutine
+  68              	  @   should always start in the top-left corner.)
+  69              	  @
+  70              	
+  71 007a 0448     	  LDR   R0, =testGrid
+  72 007c 4FF00001 	  LDR   R1, =0        @ row number
+  73 0080 4FF00002 	  LDR   R2, =0        @ column number
+  74 0084 FFF7FEFF 	  BL    solveSudoku   @ solveSudoku(grid, 0, 0)
+  75              	
+  76              	
+  77              	End_Main:
+  78              	
+  79 0088 00BD     	   POP   {PC}
+  80              	
+  81              	
+  82 008a 0000     	  .section  .data.test
+  83              	@ Sudoku Test Grid
+  84              	testGrid:
+  85 0000 02050701 	  .byte 2, 5, 7, 1, 3, 8, 6, 4, 9
+  85      03080604 
+  85      09
+  86 0009 01040602 	  .byte 1, 4, 6, 2, 9, 5, 7, 8, 3
+  86      09050708 
+  86      03
+  87 0012 03080907 	  .byte 3, 8, 9, 7, 6, 4, 5, 1, 2
+  87      06040501 
+  87      02
+  88 001b 07020508 	  .byte 7, 2, 5, 8, 1, 6, 9, 3, 4
+  88      01060903 
+  88      04
+  89 0024 04090305 	  .byte 4, 9, 3, 5, 7, 2, 1, 6, 8
+  89      07020106 
+  89      08
+  90 002d 08060109 	  .byte 8, 6, 1, 9, 4, 3, 2, 7, 5
+  90      04030207 
+  90      05
+  91 0036 09030406 	  .byte 9, 3, 4, 6, 5, 1, 8, 2, 7
+  91      05010802 
+  91      07
+  92 003f 06070203 	  .byte 6, 7, 2, 3, 8, 9, 4, 5, 1
+  92      08090405 
+  92      01
+  93 0048 05010804 	  .byte 5, 1, 8, 4, 2, 7, 3, 9, 6
+  93      02070309 
+  93      06
+  94              	
+  95              	
+  96              	@  .byte 2, 5, 7, 1, 3, 8, 6, 4, 9
+  97              	@  .byte 1, 4, 6, 2, 9, 5, 7, 8, 3
+  98              	@  .byte 3, 8, 9, 7, 6, 4, 5, 1, 2
+  99              	@  .byte 7, 2, 5, 8, 1, 6, 9, 3, 4
+ 100              	@  .byte 4, 9, 3, 5, 7, 2, 1, 6, 8
+ 101              	@  .byte 8, 6, 1, 9, 4, 3, 2, 7, 5
+ 102              	@  .byte 9, 3, 4, 6, 5, 1, 8, 2, 7
+ 103              	@  .byte 6, 7, 2, 3, 8, 9, 4, 5, 1
+ 104              	@  .byte 5, 1, 8, 4, 2, 7, 3, 9, 6
+ 105              	
+ 106              	@  .byte 5, 3, 4, 6, 7, 8, 9, 1, 2
+ 107              	@  .byte 6, 7, 2, 1, 9, 5, 3, 4, 8
+ 108              	@  .byte 1, 9, 8, 3, 4, 2, 5, 6, 7
+ 109              	@  .byte 8, 5, 9, 7, 6, 1, 4, 2, 3
+ 110              	@  .byte 4, 2, 6, 8, 5, 3, 7, 9, 1
+ 111              	@  .byte 7, 1, 3, 9, 2, 4, 8, 5, 6
+ 112              	@  .byte 9, 6, 1, 5, 3, 7, 2, 8, 4
+ 113              	@  .byte 2, 8, 7, 4, 1, 9, 6, 3, 5
+ 114              	@  .byte 3, 4, 5, 2, 8, 6, 1, 7, 9
+ 115              	
+ 116              	
+ 117              	@  .byte 5, 3, 4, 6, 7, 8, 0, 1, 2
+ 118              	@  .byte 6, 7, 2, 1, 9, 5, 3, 0, 8
+ 119              	@  .byte 1, 9, 8, 3, 4, 2, 0, 6, 7
+ 120              	@  .byte 8, 5, 9, 7, 6, 1, 4, 2, 3
+ 121              	@  .byte 4, 2, 6, 8, 5, 3, 7, 9, 1
+ 122              	@  .byte 7, 1, 3, 9, 2, 4, 8, 5, 6
+ 123              	@  .byte 0, 6, 1, 5, 3, 0, 2, 8, 4
+ 124              	@  .byte 2, 0, 7, 4, 1, 9, 6, 3, 5
+ 125              	@  .byte 3, 4, 0, 0, 8, 6, 1, 7, 9
+ 126              	
+ 127              	
+ 128              	.end...
+DEFINED SYMBOLS
+        ./src/test.s:19     .text:0000000000000000 Main
+        ./src/test.s:84     .data.test:0000000000000000 testGrid
+        ./src/test.s:21     .text:0000000000000000 $t
+        ./src/test.s:77     .text:0000000000000088 End_Main
+        ./src/test.s:82     .text:000000000000008a $d
+        ./src/test.s:128    .text:000000000000008c $d
+
+UNDEFINED SYMBOLS
+Init_Test
+countInRow
+countInCol
+countIn3x3
+nextInCell
+solveSudoku

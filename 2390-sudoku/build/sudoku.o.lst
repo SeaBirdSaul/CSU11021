@@ -1,0 +1,417 @@
+   1              	# 0 "./src/sudoku.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2390-sudoku//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  countInRow
+   7              	  .global  countInCol
+   8              	  .global  countIn3x3
+   9              	  .global  nextInCell
+  10              	  .global  solveSudoku
+  11              	
+  12              	
+  13              	@ countInRow subroutine
+  14              	@ Count the number of occurrences of a specified value in one row of a Sudoku
+  15              	@   grid.
+  16              	@
+  17              	@ Parameters: what is takedn in when called
+  18              	@   R0: start address of 2D array representing the Sudoku grid
+  19              	@   R1: row number
+  20              	@   R2: value to count
+  21              	@ Return:
+  22              	@   R0: number of occurrences of value in specified row
+  23              	countInRow:
+  24 0000 2DE9F041 	  PUSH    {R4-R8,  LR} @ will nedd to push other registers that we are using onto the stack aswell
+  25              	
+  26              	  @
+  27              	  @ Your subroutine implementation goes here
+  28              	  @
+  29              	
+  30 0004 0446     	  MOV     R4, R0
+  31 0006 4FF00000 	  MOV     R0, #0
+  32 000a 4FF00908 	  MOV     R8, #9
+  33 000e 01FB08F5 	  MUL     R5, R1, R8
+  34 0012 04EB0506 	  ADD     R6, R4, R5
+  35              	whileRow:
+  36 0016 092F     	  CMP     R7, #9
+  37 0018 0AD0     	  BEQ     endWhileRow
+  38 001a 06EB0708 	  ADD     R8, R6, R7
+  39 001e 98F80050 	  LDRB    R5, [R8]
+  40 0022 9542     	  CMP     R5, R2
+  41 0024 01D1     	  BNE     afterIfRow
+  42 0026 00F10100 	  ADD     R0, R0, #1
+  43              	afterIfRow:
+  44 002a 07F10107 	  ADD     R7, R7, #1
+  45 002e F2E7     	  B       whileRow
+  46              	endWhileRow:
+  47 0030 BDE8F081 	  POP     {R4-R8, PC}
+  48              	
+  49              	
+  50              	
+  51              	@ countInCol subroutine
+  52              	@ Count the number of occurrences of a specified value in one column of a Sudoku
+  53              	@   grid.
+  54              	@
+  55              	@ Parameters:
+  56              	@   R0: start address of 2D array representing the Sudoku grid
+  57              	@   R1: column number
+  58              	@   R2: value to count
+  59              	@ Return:
+  60              	@   R0: number of occurrences of value in specified column
+  61              	countInCol:
+  62 0034 2DE9F043 	  PUSH    {R4-R9, LR}
+  63              	
+  64              	  @
+  65              	  @ Your subroutine implementation goes here
+  66              	  @
+  67              	
+  68 0038 0446     	  MOV     R4, R0
+  69 003a 4FF00000 	  MOV     R0, #0
+  70 003e 04EB0105 	  ADD     R5, R4, R1
+  71 0042 4FF00909 	  MOV     R9, #9
+  72              	whileCol:
+  73 0046 092E     	  CMP     R6, #9
+  74 0048 0BD0     	  BEQ     endWhileCol
+  75 004a 06FB09F7 	  MUL     R7, R6, R9
+  76 004e 2F44     	  ADD     R7, R7, R5
+  77 0050 97F80080 	  LDRB    R8, [R7]
+  78 0054 9045     	  CMP     R8, R2
+  79 0056 01D1     	  BNE     afterIfCol
+  80 0058 00F10100 	  ADD     R0, R0, #1
+  81              	afterIfCol:
+  82 005c 06F10106 	  ADD     R6, R6, #1
+  83 0060 F1E7     	  B       whileCol
+  84              	endWhileCol:
+  85              	
+  86 0062 BDE8F083 	  POP     {R4-R9, PC}
+  87              	
+  88              	
+  89              	
+  90              	@ countIn3x3 subroutine
+  91              	@ Count the number of occurrences of a specified value in one 3x3 subgrid
+  92              	@   of a Sudoku grid.
+  93              	@
+  94              	@ Parameters:
+  95              	@   R0: start address of 2D array representing the Sudoku grid
+  96              	@   R1: row number of any row in the 3x3 subgrid
+  97              	@   R2: column number of any column in the 3x3 subgrid
+  98              	@   R3: value to count
+  99              	@ Return:
+ 100              	@   R0: number of occurrences of value in specified 3x3 subgrid
+ 101              	countIn3x3:
+ 102 0066 2DE9F043 	  PUSH    {R4-R9, LR}
+ 103              	
+ 104              	  @
+ 105              	  @ Your subroutine implementation goes here
+ 106              	  @
+ 107              	
+ 108              	
+ 109              	  
+ 110              	
+ 111              	
+ 112 006a 0329     	  CMP     R1, #3
+ 113 006c 0EDA     	  BGE     rowIf2
+ 114 006e 032A     	  CMP     R2, #3
+ 115 0070 02DA     	  BGE     colIf2
+ 116 0072 4FF00004 	  MOV     R4, 0x0
+ 117 0076 2BE0     	  B       start3x3While
+ 118              	colIf2:
+ 119 0078 062A     	  CMP     R2, #6
+ 120 007a 02DA     	  BGE     colIf3
+ 121 007c 4FF00304 	  MOV     R4, 0x3
+ 122 0080 26E0     	  B       start3x3While
+ 123              	colIf3:
+ 124 0082 092A     	  CMP     R2, #9
+ 125 0084 42DA     	  BGE     endCountIn3x3
+ 126 0086 4FF00604 	  MOV     R4, 0x6
+ 127 008a 21E0     	  B       start3x3While
+ 128              	
+ 129              	rowIf2:
+ 130 008c 0629     	  CMP     R1, #6
+ 131 008e 0EDA     	  BGE     rowIf3
+ 132 0090 032A     	  CMP     R2, #3
+ 133 0092 02DA     	  BGE     colIf4
+ 134 0094 4FF01B04 	  MOV     R4, 0x1b
+ 135 0098 1AE0     	  B       start3x3While
+ 136              	colIf4:
+ 137 009a 062A     	  CMP     R2, #6
+ 138 009c 02DA     	  BGE     colIf5
+ 139 009e 4FF01E04 	  MOV     R4, 0x1e
+ 140 00a2 15E0     	  B       start3x3While
+ 141              	colIf5:
+ 142 00a4 092A     	  CMP     R2, #9
+ 143 00a6 31DA     	  BGE     endCountIn3x3
+ 144 00a8 4FF02104 	  MOV     R4, 0x21
+ 145 00ac 10E0     	  B       start3x3While
+ 146              	
+ 147              	rowIf3:
+ 148 00ae 0929     	  CMP     R1, #9
+ 149 00b0 2CDA     	  BGE     endCountIn3x3
+ 150 00b2 032A     	  CMP     R2, #3
+ 151 00b4 02DA     	  BGE     colIf6
+ 152 00b6 4FF03604 	  MOV     R4, 0x36
+ 153 00ba 09E0     	  B       start3x3While
+ 154              	colIf6:
+ 155 00bc 062A     	  CMP     R2, #6
+ 156 00be 02DA     	  BGE     colIf7
+ 157 00c0 4FF03904 	  MOV     R4, 0x39
+ 158 00c4 04E0     	  B       start3x3While
+ 159              	colIf7:
+ 160 00c6 092A     	  CMP     R2, #9
+ 161 00c8 20DA     	  BGE     endCountIn3x3
+ 162 00ca 4FF03C04 	  MOV     R4, 0x3c
+ 163 00ce FFE7     	  B       start3x3While
+ 164              	
+ 165              	start3x3While:
+ 166 00d0 0444     	  ADD     R4, R4, R0
+ 167 00d2 4FF00000 	  MOV     R0, #0
+ 168 00d6 4FF00906 	  MOV     R6, #9
+ 169 00da 4FF00005 	  MOV     R5, #0
+ 170              	ColWhile3x3:
+ 171 00de 032D     	  CMP     R5, #3
+ 172 00e0 14DA     	  BGE     endCountIn3x3
+ 173 00e2 002D     	  CMP     R5, #0
+ 174 00e4 00D0     	  BEQ     afterSmolIf
+ 175 00e6 3444     	  ADD     R4, R4, R6
+ 176              	afterSmolIf:
+ 177 00e8 4FF00007 	  MOV     R7, #0
+ 178              	RowWhile3x3:
+ 179 00ec 032F     	  CMP     R7, #3
+ 180 00ee 0AD0     	  BEQ     end3x3RowWhile
+ 181 00f0 04EB0708 	  ADD     R8, R4, R7
+ 182 00f4 98F80090 	  LDRB    R9, [R8]
+ 183 00f8 9945     	  CMP     R9, R3
+ 184 00fa 01D1     	  BNE     after3x3If
+ 185 00fc 00F10100 	  ADD     R0, R0, #1
+ 186              	after3x3If:
+ 187 0100 07F10107 	  ADD     R7, R7, #1
+ 188 0104 F2E7     	  B       RowWhile3x3
+ 189              	end3x3RowWhile:
+ 190 0106 05F10105 	  ADD     R5, R5, #1
+ 191 010a E8E7     	  B       ColWhile3x3
+ 192              	endCountIn3x3:
+ 193              	
+ 194 010c BDE8F083 	  POP     {R4-R9, PC}
+ 195              	
+ 196              	
+ 197              	
+ 198              	@ nextInCell subroutine
+ 199              	@ Find the next higher valid value that can be placed in a specified cell in a
+ 200              	@   Sudoku grid.
+ 201              	@
+ 202              	@ Parameters:
+ 203              	@   R0: start address of 2D array representing the Sudoku grid
+ 204              	@   R1: row number of cell
+ 205              	@   R2: column number of cell
+ 206              	@ Return:
+ 207              	@   R0: next higher value or 0 if there is no valid higher value
+ 208              	nextInCell:
+ 209 0110 F0B5     	  PUSH    {R4-R7, LR}
+ 210              	
+ 211              	  @
+ 212              	  @ Your subroutine implementation goes here
+ 213              	  @
+ 214              	
+ 215 0112 0446     	  MOV     R4, R0 @MEM
+ 216 0114 0D46     	  MOV     R5, R1 @ROW
+ 217 0116 1646     	  MOV     R6, R2 @COL
+ 218 0118 4FF00107 	  MOV     R7, #1 @COUNTER
+ 219              	nextWhile:
+ 220 011c 092F     	  CMP     R7, #9
+ 221 011e 1ADC     	  BGT     noResult
+ 222 0120 2046     	  MOV     R0, R4
+ 223 0122 2946     	  MOV     R1, R5
+ 224 0124 3A46     	  MOV     R2, R7
+ 225 0126 FFF7FEFF 	  BL      countInRow
+ 226 012a 0028     	  CMP     R0, #0
+ 227 012c 10D1     	  BNE     incCounter
+ 228 012e 2046     	  MOV     R0, R4
+ 229 0130 3146     	  MOV     R1, R6
+ 230 0132 3A46     	  MOV     R2, R7
+ 231 0134 FFF7FEFF 	  BL      countInCol
+ 232 0138 0028     	  CMP     R0, #0
+ 233 013a 09D1     	  BNE     incCounter
+ 234 013c 2046     	  MOV     R0, R4
+ 235 013e 2946     	  MOV     R1, R5
+ 236 0140 3246     	  MOV     R2, R6
+ 237 0142 3B46     	  MOV     R3, R7
+ 238 0144 FFF7FEFF 	  BL      countIn3x3
+ 239 0148 0028     	  CMP     R0, #0
+ 240 014a 01D1     	  BNE     incCounter
+ 241 014c 3846     	  MOV     R0, R7
+ 242 014e 04E0     	  B       endNext
+ 243              	
+ 244              	incCounter:
+ 245 0150 07F10107 	  ADD     R7, R7, #1
+ 246 0154 E2E7     	  B       nextWhile
+ 247              	
+ 248              	noResult:
+ 249 0156 4FF00000 	  MOV     R0, #0
+ 250              	endNext:
+ 251              	
+ 252 015a F0BD     	  POP     {R4-R7, PC}
+ 253              	
+ 254              	
+ 255              	
+ 256              	@ solveSudoku subroutine
+ 257              	@ Solve a Sudoku puzzle.
+ 258              	@
+ 259              	@ Parameters:
+ 260              	@   R0: start address of 2D array representing the Sudoku grid
+ 261              	@   R1: row number of next cell to modify
+ 262              	@   R2: column number of next cell to modify
+ 263              	@ Return:
+ 264              	@   R0: 1 if a solution was found, zero otherwise
+ 265              	solveSudoku:
+ 266 015c 2DE9F05F 	  PUSH    {R4-R12, LR}
+ 267              	
+ 268              	  @
+ 269              	  @ Your subroutine implementation goes here
+ 270              	  @
+ 271              	  
+ 272 0160 0446     	  MOV     R4, R0
+ 273 0162 0D46     	  MOV     R5, R1
+ 274 0164 1646     	  MOV     R6, R2
+ 275 0166 4FF0000C 	  MOV     R12, #0
+ 276 016a 092D     	  CMP     R5, #9
+ 277 016c 02D3     	  BLO     afterFirstSolveIf
+ 278 016e 4FF0010C 	  MOV     R12, #1
+ 279 0172 48E0     	  B       endSolve
+ 280              	afterFirstSolveIf:
+ 281 0174 4FF0000C 	  MOV     R12, #0
+ 282 0178 06F10108 	  ADD     R8, R6, #1
+ 283 017c 2F46     	  MOV     R7, R5
+ 284 017e B8F1090F 	  CMP     R8, #9
+ 285 0182 03D3     	  BLO     afterSecondSolveIf
+ 286 0184 4FF00008 	  MOV     R8,  #0
+ 287 0188 07F10107 	  ADD     R7, R7, #1
+ 288              	afterSecondSolveIf:
+ 289 018c 2046     	  MOV     R0, R4
+ 290 018e 2946     	  MOV     R1, R5
+ 291 0190 3246     	  MOV     R2, R6
+ 292 0192 00F03BF8 	  BL      getArrayPos
+ 293 0196 90F80090 	  LDRB    R9, [R0]
+ 294 019a B9F1000F 	  CMP     R9, #0
+ 295 019e 05D0     	  BEQ     afterThirdSolveIf
+ 296 01a0 2046     	  MOV     R0, R4
+ 297 01a2 3946     	  MOV     R1, R7
+ 298 01a4 4246     	  MOV     R2, R8
+ 299 01a6 FFF7FEFF 	  BL      solveSudoku
+ 300 01aa 8446     	  MOV     R12, R0
+ 301              	afterThirdSolveIf:
+ 302 01ac 2046     	  MOV     R0, R4
+ 303 01ae 2946     	  MOV     R1, R5
+ 304 01b0 3246     	  MOV     R2, R6
+ 305 01b2 FFF7FEFF 	  BL      nextInCell
+ 306 01b6 8246     	  MOV     R10, R0
+ 307 01b8 BAF1000F 	  CMP     R10, #0
+ 308 01bc 15D0     	  BEQ     afterSolveWhile
+ 309 01be BCF1010F 	  CMP     R12, #1
+ 310 01c2 12D0     	  BEQ     afterSolveWhile
+ 311 01c4 2046     	  MOV     R0, R4
+ 312 01c6 2946     	  MOV     R1, R5
+ 313 01c8 3246     	  MOV     R2, R6
+ 314 01ca 00F01FF8 	  BL      getArrayPos
+ 315 01ce 80F800A0 	  STRB    R10, [R0]
+ 316 01d2 2046     	  MOV     R0, R4
+ 317 01d4 3946     	  MOV     R1, R7
+ 318 01d6 4246     	  MOV     R2, R8
+ 319 01d8 FFF7FEFF 	  BL      solveSudoku
+ 320 01dc 8446     	  MOV     R12, R0
+ 321 01de 2046     	  MOV     R0, R4
+ 322 01e0 2946     	  MOV     R1, R5
+ 323 01e2 3246     	  MOV     R2, R6
+ 324 01e4 FFF7FEFF 	  BL      nextInCell
+ 325 01e8 8246     	  MOV     R10, R0
+ 326              	afterSolveWhile:
+ 327 01ea BCF1000F 	  CMP     R12, #0
+ 328 01ee 08D1     	  BNE     afterFinalSolveIf
+ 329 01f0 2046     	  MOV     R0, R4
+ 330 01f2 2946     	  MOV     R1, R5
+ 331 01f4 3246     	  MOV     R2, R6
+ 332 01f6 00F009F8 	  BL      getArrayPos
+ 333 01fa 4FF0000B 	  MOV     R11, #0
+ 334 01fe 80F800B0 	  STRB    R11, [R0]
+ 335              	afterFinalSolveIf:
+ 336 0202 6046     	  MOV     R0, R12
+ 337 0204 FFE7     	  B       endSolve
+ 338              	
+ 339              	endSolve:
+ 340 0206 6046     	  MOV     R0, R12
+ 341              	
+ 342              	 
+ 343              	 
+ 344              	
+ 345 0208 BDE8F09F 	  POP     {R4-R12, PC}
+ 346              	
+ 347              	
+ 348              	@ Parameters:
+ 349              	@ R0 = startingMemAddress
+ 350              	@ R1 = rowNum
+ 351              	@ R2 = colNum
+ 352              	@ output:
+ 353              	@ R0 = memAddressOfIntersection
+ 354              	getArrayPos:
+ 355 020c 2DE9F042 	  PUSH    {R4-R7, R9, LR}
+ 356              	
+ 357 0210 0446     	  MOV     R4, R0
+ 358 0212 0D46     	  MOV     R5, R1
+ 359 0214 1646     	  MOV     R6, R2
+ 360              	
+ 361 0216 4FF00909 	  MOV     R9, #9
+ 362              	
+ 363 021a 05FB09F7 	  MUL     R7, R5, R9
+ 364 021e 3C44     	  ADD     R4, R4, R7
+ 365 0220 3444     	  ADD     R4, R4, R6
+ 366              	
+ 367 0222 2046     	  MOV     R0, R4
+ 368              	  
+ 369 0224 BDE8F082 	  POP     {R4-R7, R9, PC}
+ 370              	
+ 371              	  .end...
+DEFINED SYMBOLS
+      ./src/sudoku.s:23     .text:0000000000000000 countInRow
+      ./src/sudoku.s:61     .text:0000000000000034 countInCol
+      ./src/sudoku.s:101    .text:0000000000000066 countIn3x3
+      ./src/sudoku.s:208    .text:0000000000000110 nextInCell
+      ./src/sudoku.s:265    .text:000000000000015c solveSudoku
+      ./src/sudoku.s:24     .text:0000000000000000 $t
+      ./src/sudoku.s:35     .text:0000000000000016 whileRow
+      ./src/sudoku.s:46     .text:0000000000000030 endWhileRow
+      ./src/sudoku.s:43     .text:000000000000002a afterIfRow
+      ./src/sudoku.s:72     .text:0000000000000046 whileCol
+      ./src/sudoku.s:84     .text:0000000000000062 endWhileCol
+      ./src/sudoku.s:81     .text:000000000000005c afterIfCol
+      ./src/sudoku.s:129    .text:000000000000008c rowIf2
+      ./src/sudoku.s:118    .text:0000000000000078 colIf2
+      ./src/sudoku.s:165    .text:00000000000000d0 start3x3While
+      ./src/sudoku.s:123    .text:0000000000000082 colIf3
+      ./src/sudoku.s:192    .text:000000000000010c endCountIn3x3
+      ./src/sudoku.s:147    .text:00000000000000ae rowIf3
+      ./src/sudoku.s:136    .text:000000000000009a colIf4
+      ./src/sudoku.s:141    .text:00000000000000a4 colIf5
+      ./src/sudoku.s:154    .text:00000000000000bc colIf6
+      ./src/sudoku.s:159    .text:00000000000000c6 colIf7
+      ./src/sudoku.s:170    .text:00000000000000de ColWhile3x3
+      ./src/sudoku.s:176    .text:00000000000000e8 afterSmolIf
+      ./src/sudoku.s:178    .text:00000000000000ec RowWhile3x3
+      ./src/sudoku.s:189    .text:0000000000000106 end3x3RowWhile
+      ./src/sudoku.s:186    .text:0000000000000100 after3x3If
+      ./src/sudoku.s:219    .text:000000000000011c nextWhile
+      ./src/sudoku.s:248    .text:0000000000000156 noResult
+      ./src/sudoku.s:244    .text:0000000000000150 incCounter
+      ./src/sudoku.s:250    .text:000000000000015a endNext
+      ./src/sudoku.s:280    .text:0000000000000174 afterFirstSolveIf
+      ./src/sudoku.s:339    .text:0000000000000206 endSolve
+      ./src/sudoku.s:288    .text:000000000000018c afterSecondSolveIf
+      ./src/sudoku.s:354    .text:000000000000020c getArrayPos
+      ./src/sudoku.s:301    .text:00000000000001ac afterThirdSolveIf
+      ./src/sudoku.s:326    .text:00000000000001ea afterSolveWhile
+      ./src/sudoku.s:335    .text:0000000000000202 afterFinalSolveIf
+
+NO UNDEFINED SYMBOLS

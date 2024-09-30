@@ -1,0 +1,53 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2360-fill2//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Main
+   7              	
+   8              	
+   9              	Main:
+  10 0000 2DE91043 	  PUSH    {R4, R8, R9, LR}
+  11              	
+  12 0004 074C     	  LDR     R4, =testMem      @ fill memory at testMem
+  13 0006 4FF04009 	  MOV     R9, #64           @ fill 64 words
+  14 000a DFF81C80 	  LDR     R8, =0x12345678   @ fill with value 0x12345678
+  15              	
+  16              	  @ push parameters to stack (order is important!!)
+  17 000e 10B4     	  PUSH    {R4}              @ push address
+  18 0010 4DF8049D 	  PUSH    {R9}              @ push length
+  19 0014 4DF8048D 	  PUSH    {R8}              @ push value
+  20              	
+  21              	  @ invoke fill subroutine
+  22 0018 FFF7FEFF 	  BL      fill
+  23              	
+  24 001c 03B0     	  ADD     SP, SP, #12       @ pop parameters
+  25              	
+  26              	End_Main:
+  27 001e BDE81083 	  POP     {R4, R8, R9, PC}
+  28              	
+  29              	
+  30              	
+  31 0022 0000     	  .section  .data.test
+  32              	testMem:
+  33 0000 00000000 	  .space    0x400             @ 1KiB of memory to play with
+  33      00000000 
+  33      00000000 
+  33      00000000 
+  33      00000000 
+DEFINED SYMBOLS
+        ./src/test.s:9      .text:0000000000000000 Main
+        ./src/test.s:10     .text:0000000000000000 $t
+        ./src/test.s:32     .data.test:0000000000000000 testMem
+        ./src/test.s:26     .text:000000000000001e End_Main
+        ./src/test.s:33     .data.test:0000000000000000 $d
+        ./src/test.s:31     .text:0000000000000022 $d
+        ./src/test.s:33     .text:0000000000000024 $d
+
+UNDEFINED SYMBOLS
+fill

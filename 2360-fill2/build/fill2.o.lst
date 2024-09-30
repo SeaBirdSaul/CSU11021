@@ -1,0 +1,42 @@
+   1              	# 0 "./src/fill2.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2360-fill2//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  fill
+   7              	
+   8              	
+   9              	@ fill subroutine
+  10              	@ Fills a contiguous sequence of words in memory with the same value
+  11              	@ Parameters
+  12              	@       [sp+0]: value – value to store in each word (1st Top Of Stack)
+  13              	@       [sp+4]: length – number of words to be filled (2nd Top Of Stack)
+  14              	@       [sp+8]: address – address of first word to be filled (3rd Top Of Stack)
+  15              	fill:
+  16 0000 F0B5     	  PUSH    {R4-R7,LR}            @ save registers
+  17              	          
+  18 0002 079C     	  LDR     R4, [SP, #28]         @ load address parameter (not popping)
+  19 0004 069D     	  LDR     R5, [SP, #24]         @ load length parameter (not popping)
+  20 0006 059E     	  LDR     R6, [SP, #20]         @ load value parameter (not popping)
+  21              	        
+  22 0008 4FF00007 	  MOV     R7, #0                @ count = 0;
+  23              	.LwhFill:
+  24 000c AF42     	  CMP     R7, R5                @ while (count < length)
+  25 000e 04D2     	  BHS     .LeWhFill             @ {
+  26 0010 44F82760 	  STR     R6, [R4, R7, LSL #2]  @  word[address + count * 4] = value;
+  27 0014 07F10107 	  ADD     R7, #1                @  count = count + 1;
+  28 0018 F8E7     	  B       .LwhFill              @ }
+  29              	.LeWhFill:
+  30 001a F0BD     	  POP     {R4-R7,PC}            @ restore registers
+  31              	
+  32              	  .end...
+DEFINED SYMBOLS
+       ./src/fill2.s:15     .text:0000000000000000 fill
+       ./src/fill2.s:16     .text:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS

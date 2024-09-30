@@ -1,0 +1,178 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2910-exam//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Main
+   7              	  .global  tetrisField
+   8              	  .global  tetromino
+   9              	
+  10              	@
+  11              	@ HINT!!!
+  12              	@
+  13              	@ Use the WATCH window in Run/Debug mode to view each
+  14              	@   row of the Tetris field.
+  15              	@   <---------
+  16              	@
+  17              	@ Click the + in the WATCH view panel and set the
+  18              	@   "expression to watch" to the following:
+  19              	@
+  20              	@   (char[20][10])(tetrisField)
+  21              	@
+  22              	
+  23              	
+  24              	@
+  25              	@ Test each subroutine
+  26              	@
+  27              	  .section  .text
+  29              	Main:
+  30 0000 00B5     	  PUSH    {LR}
+  31              	
+  32              	  @ Test isRowFull (full)
+  33 0002 1548     	  LDR     R0, =tetrisField
+  34 0004 4FF01101 	  LDR     R1, =17
+  35 0008 FFF7FEFF 	  BL      isRowFull           @ should be TRUE / 1
+  36              	  
+  37              	  @ Test isRowFull (not full)
+  38 000c 1248     	  LDR     R0, =tetrisField
+  39 000e 4FF01301 	  LDR     R1, =19
+  40 0012 FFF7FEFF 	  BL      isRowFull           @ should be FALSE / 0
+  41              	
+  42              	  @ Test lowestFull (18)  
+  43 0016 1048     	  LDR     R0, =tetrisField
+  44 0018 FFF7FEFF 	  BL      lowestFull          @ should be 18 (0x12)
+  45              	
+  46              	  @ Test removeRow
+  47 001c 0E48     	  LDR     R0, =tetrisField
+  48 001e 4FF01101 	  LDR     R1, =17
+  49 0022 FFF7FEFF 	  BL      removeRow           @ check field
+  50              	
+  51              	  @ Test tetrominoFits (fits)
+  52 0026 0C48     	  LDR     R0, =tetrisField
+  53 0028 4FF00E01 	  LDR     R1, =14
+  54 002c 4FF00302 	  LDR     R2, =3
+  55 0030 0A4B     	  LDR     R3, =tetromino
+  56 0032 FFF7FEFF 	  BL      tetrominoFits      @ should be TRUE / 1
+  57              	
+  58              	  @ Test tetrominoFits (does not fit)
+  59 0036 0848     	  LDR     R0, =tetrisField
+  60 0038 4FF01001 	  LDR     R1, =16
+  61 003c 4FF00502 	  LDR     R2, =5
+  62 0040 064B     	  LDR     R3, =tetromino
+  63 0042 FFF7FEFF 	  BL      tetrominoFits      @ should be FALSE / 0
+  64              	
+  65              	  @ Test playTetromino
+  66 0046 0448     	  LDR     R0, =tetrisField
+  67 0048 4FF00701 	  LDR     R1, =7
+  68 004c 4FF00302 	  LDR     R2, =3
+  69 0050 024B     	  LDR     R3, =tetromino
+  70 0052 FFF7FEFF 	  BL      playTetromino      @ check field
+  71              	
+  72              	End_Main:
+  73 0056 00BD     	  POP     {PC}
+  74              	
+  75              	
+  76              	
+  77              	  .section  .data.test
+  78              	
+  79              	@
+  80              	@ The sample Tetris field below is the field shown
+  81              	@   in Part 1 of the examination paper.
+  82              	@
+  83              	
+  84              	tetrisField:                            @ row    address
+  85              	  @ Example #1
+  86 0000 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 0   0x20000000
+  86      00000000 
+  86      0000
+  87 000a 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 1   0x2000000A
+  87      00000000 
+  87      0000
+  88 0014 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 2   0x20000014
+  88      00000000 
+  88      0000
+  89 001e 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 3   0x2000001E
+  89      00000000 
+  89      0000
+  90 0028 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 4   0x20000028
+  90      00000000 
+  90      0000
+  91 0032 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 5   0x20000032
+  91      00000000 
+  91      0000
+  92 003c 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 6   0x2000003C
+  92      00000000 
+  92      0000
+  93 0046 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 7   0x20000046
+  93      00000000 
+  93      0000
+  94 0050 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 8   0x20000050
+  94      00000000 
+  94      0000
+  95 005a 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 9   0x2000005A
+  95      00000000 
+  95      0000
+  96 0064 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 10  0x20000064
+  96      00000000 
+  96      0000
+  97 006e 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 11  0x2000006E
+  97      00000000 
+  97      0000
+  98 0078 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 12  0x20000078
+  98      00000000 
+  98      0000
+  99 0082 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 13  0x20000082
+  99      00000000 
+  99      0000
+ 100 008c 00000000 	  .byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0    @ 14  0x2000008C
+ 100      00000000 
+ 100      0000
+ 101 0096 00000000 	  .byte 0, 0, 0, 0, 0, 1, 0, 1, 0, 0    @ 15  0x20000096
+ 101      00010001 
+ 101      0000
+ 102 00a0 01000001 	  .byte 1, 0, 0, 1, 0, 1, 0, 1, 0, 1    @ 16  0x200000A0
+ 102      00010001 
+ 102      0001
+ 103 00aa 01010101 	  .byte 1, 1, 1, 1, 1, 1, 1, 1, 1, 1    @ 17  0x200000AA
+ 103      01010101 
+ 103      0101
+ 104 00b4 01010101 	  .byte 1, 1, 1, 1, 1, 1, 1, 1, 1, 1    @ 18  0x200000B4
+ 104      01010101 
+ 104      0101
+ 105 00be 01010101 	  .byte 1, 1, 1, 1, 1, 1, 0, 1, 1, 1    @ 19  0x200000BE
+ 105      01010001 
+ 105      0101
+ 106              	
+ 107              	
+ 108              	@
+ 109              	@ The sample tetromino below is the tetromino shown
+ 110              	@   in Part 4 of the examination paper.
+ 111              	@
+ 112              	
+ 113              	tetromino:
+ 114 00c8 01000000 	  .byte 1, 0, 0, 0
+ 115 00cc 01010000 	  .byte 1, 1, 0, 0
+ 116 00d0 00010000 	  .byte 0, 1, 0, 0
+ 117 00d4 00000000 	  .byte 0, 0, 0, 0
+ 118              	
+ 119              	.end...
+DEFINED SYMBOLS
+        ./src/test.s:29     .text:0000000000000000 Main
+        ./src/test.s:84     .data.test:0000000000000000 tetrisField
+        ./src/test.s:113    .data.test:00000000000000c8 tetromino
+        ./src/test.s:30     .text:0000000000000000 $t
+        ./src/test.s:72     .text:0000000000000056 End_Main
+        ./src/test.s:119    .text:0000000000000058 $d
+
+UNDEFINED SYMBOLS
+Init_Test
+isRowFull
+lowestFull
+removeRow
+tetrominoFits
+playTetromino
