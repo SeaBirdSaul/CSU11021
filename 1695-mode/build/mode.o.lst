@@ -1,0 +1,141 @@
+   1              	# 0 "./src/mode.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1695-mode//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 6
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	  @read in from memory, count and variables
+  14              	  @isolate count and set to counter
+  15              	  @read each variable and store somewhere (memory)
+  16              	  @keep track of how many times the repeat (mode)
+  17              	  @store mode in R0
+  18              	
+  19              	  @while (counter != count)
+  20              	  @  for (x in list)
+  21              	  @      for (y in list)
+  22              	  @          if (x == y)
+  23              	  @              Modecount+=1
+  24              	  @          y+=1
+  25              	  @      if (Modecount > currentmode)
+  26              	  @          modevlaue = x
+  27              	  @          currentmode = Modecount
+  28              	  @      x+=1
+  29              	  @  counter +=1
+  30              	
+  31              	
+  32              	  @R1 = MENYOKE
+  33              	  @R2 = part 2 stuff
+  34              	  @R3 = count
+  35              	  @R4 = x
+  36              	  @R5 = y
+  37              	  @R6 = counter
+  38              	  @R7 = xcount
+  39              	  @R8 = ycount
+  40              	  @R9 = Modecount
+  41              	  @R10 = currentModeCount
+  42              	  @R11 = modeValue
+  43              	  @R12 = ADDCOUNT
+  44              	  
+  45              	  
+  46 0000 0B68     	  LDR R3, [R1] @puts count in R3
+  47 0002 01F10401 	  ADD R1, R1, #4 @increments R1 to get the half word things
+  48 0006 0C88     	  LDRH R4, [R1] @puts x in R4
+  49 0008 4FF00107 	  MOV R7, #1
+  50              	  @LDRH R4, [R1] @gets first half word variable (x)
+  51              	  @ADD R1, R1, #2 @increments to get second variable 
+  52              	  @LDRH R5, [R1] @gets second variable (y)
+  53              	  
+  54              	
+  55              	while:
+  56 000c 0D88     	  LDRH R5, [R1] @puts y in R5
+  57              	  @CMP R6, R3 @compares counter to count
+  58              	  @BEQ EndLife @death is equal
+  59 000e 06F10106 	  ADD R6, R6, #1 @increments counter
+  60 0012 9F42     	  CMP R7, R3 @compares xcount to count
+  61 0014 21D0     	  BEQ EndLife @death if equal
+  62 0016 9845     	  CMP R8, R3 @compares ycount to count
+  63 0018 08D0     	  BEQ check @if equal break to check
+  64 001a 01F10201 	  ADD R1, R1, #2
+  65 001e 08F10108 	  ADD R8, R8, #1
+  66 0022 AC42     	  CMP R4, R5 @comp x and y 
+  67 0024 F2D1     	  BNE while @reset loop if not equal
+  68 0026 09F10109 	  ADD R9, R9, #1 @if equal inc Modecount
+  69 002a EFE7     	  B   while @restart loop
+  70              	  
+  71              	@      if (Modecount > currentmode)
+  72              	  @          modevlaue = x
+  73              	  @          currentmode = Modecount
+  74              	check:
+  75 002c D145     	  CMP R9, R10 @comps Modecount to currentModeCount
+  76 002e 01DD     	  BLE incXdecY @branch if >=
+  77 0030 A346     	  MOV R11, R4
+  78 0032 CA46     	  MOV R10, R9 @update current mode 
+  79              	  
+  80              	
+  81              	incXdecY:
+  82 0034 4FF00008 	  MOV R8, #0
+  83 0038 06EB060C 	  ADD R12, R6, R6
+  84 003c A1EB0C01 	  SUB R1, R1, R12
+  85 0040 4FF0020C 	  MOV R12, #2
+  86 0044 07F10107 	  ADD R7, R7, #1 @increment xcount
+  87 0048 07FB0CFC 	  MUL R12, R7, R12
+  88 004c 6144     	  ADD R1, R1, R12 @increment R1
+  89 004e 0C88     	  LDRH R4, [R1] @puts x in R4
+  90 0050 A1EB0C01 	  SUB R1, R1, R12
+  91 0054 4FF00006 	  MOV  R6, #0  
+  92 0058 D8E7     	  B   while
+  93              	
+  94              	EndLife:
+  95 005a 4FF00006 	  MOV R6, #0 @sets counter to 0
+  96 005e 5846     	  MOV R0, R11 @sets R0 to mode
+  97 0060 A3EB0A07 	  SUB R7, R3, R10
+  98              	  
+  99 0064 06EB060C 	  ADD R12, R6, R6
+ 100 0068 A1EB0C01 	  SUB R1, R1, R12
+ 101              	  
+ 102 006c 0F60     	  STR R7, [R1]
+ 103 006e 01F10401 	  ADD R1, R1, #4
+ 104              	listLoop:
+ 105 0072 9E42     	  CMP R6, R3
+ 106 0074 08D0     	  BEQ EndLife2ElectricBoogaloo
+ 107 0076 06F10106 	  ADD R6, R6, #1
+ 108 007a 0C68     	  LDR R4, [R1]
+ 109 007c 01F10201 	  ADD R1, R1, #2
+ 110 0080 8442     	  CMP R4, R0
+ 111 0082 F6D0     	  BEQ listLoop
+ 112 0084 0C80     	  STRH R4, [R1]
+ 113 0086 F4E7     	  B   listLoop
+ 114              	
+ 115              	EndLife2ElectricBoogaloo:
+ 116              	
+ 117              	
+ 118              	
+ 119              	  @ End of program ... check your result
+ 120              	
+ 121              	End_Main:
+ 122 0088 7047     	  BX    LR
+ 123              	
+ 124              	  .end...
+DEFINED SYMBOLS
+        ./src/mode.s:8      .text:0000000000000000 Main
+        ./src/mode.s:46     .text:0000000000000000 $t
+        ./src/mode.s:55     .text:000000000000000c while
+        ./src/mode.s:94     .text:000000000000005a EndLife
+        ./src/mode.s:74     .text:000000000000002c check
+        ./src/mode.s:81     .text:0000000000000034 incXdecY
+        ./src/mode.s:104    .text:0000000000000072 listLoop
+        ./src/mode.s:115    .text:0000000000000088 EndLife2ElectricBoogaloo
+        ./src/mode.s:121    .text:0000000000000088 End_Main
+
+NO UNDEFINED SYMBOLS

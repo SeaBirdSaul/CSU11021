@@ -1,0 +1,48 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1690-itoa//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	
+   8              	
+   9              	
+  10              	@
+  11              	@ Subroutine to initialise test inputs
+  12              	@
+  13              	  .section  .text
+  15              	Init_Test:
+  16 0000 4DF804ED 	  STMFD   SP!, {LR}
+  17 0004 6FF00801 	  LDR     R1, =-9
+  18 0008 0148     	  LDR     R0, =newString    @ Start address (in RAM) of space for new (copied) string
+  19 000a 5DF804FB 	  LDMFD   SP!, {PC}
+  20              	
+  21              	
+  22              	
+  23              	@
+  24              	@ Space in RAM for new string
+  25              	@
+  26 000e 0000     	  .section .data
+  27              	
+  28              	newString:
+  29 0000 00000000 	  .space  256
+  29      00000000 
+  29      00000000 
+  29      00000000 
+  29      00000000 
+  30              	
+  31              	.end
+DEFINED SYMBOLS
+        ./src/test.s:15     .text:0000000000000000 Init_Test
+        ./src/test.s:16     .text:0000000000000000 $t
+        ./src/test.s:28     .data:0000000000000000 newString
+        ./src/test.s:29     .data:0000000000000000 $d
+        ./src/test.s:26     .text:000000000000000e $d
+        ./src/test.s:31     .text:0000000000000010 $d
+
+NO UNDEFINED SYMBOLS

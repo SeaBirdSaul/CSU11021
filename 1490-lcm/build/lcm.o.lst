@@ -1,0 +1,62 @@
+   1              	# 0 "./src/lcm.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1490-lcm//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 3
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14              	  @if (((num1 % count) == 0) && ((num2 % count) == 0)) {
+  15              		@		result = count;
+  16              	
+  17              	
+  18              	  @divisoin with remainder - BlackBoard descussion opened by Lucia Brown
+  19              	@  UDIV R4, R3, R1
+  20              	@  MUL R4, R4, R1
+  21              	@  SUB R4, R3, R4 
+  22              	
+  23              	  @start of if/while statement
+  24 0000 4FF00006 	  MOV R6, #0
+  25              	WhileState:
+  26 0004 0028     	  CMP R0, #0  @while count == 0 
+  27 0006 13D1     	  BNE EndWhileState
+  28 0008 06F10106 	  ADD R6, #1 @ count++
+  29 000c B6FBF1F4 	  UDIV R4, R6, R1  @(num1 % count)
+  30 0010 04FB01F4 	  MUL R4, R4, R1  @(num1 % count)
+  31 0014 A6EB0404 	  SUB R4, R6, R4  @(num1 % count)
+  32 0018 002C     	  CMP R4, #0    @((num1 % count) == 0) 
+  33 001a F3D1     	  BNE WhileState
+  34 001c B6FBF2F5 	  UDIV R5, R6, R2 @(num2 % count)
+  35 0020 05FB02F5 	  MUL R5, R5, R2  @(num2 % count)
+  36 0024 A6EB0505 	  SUB R5, R6, R5  @(num2 % count)
+  37 0028 002D     	  CMP R5, #0  @((num2 % count) == 0)
+  38 002a EBD1     	  BNE WhileState
+  39 002c 3046     	  MOV R0, R6  @		result = count;
+  40 002e FFE7     	  B   EndWhileState
+  41              	
+  42              	EndWhileState: 
+  43              	@The lettuce won
+  44              	  @ End of program ... check your result
+  45              	
+  46              	End_Main:
+  47 0030 7047     	  BX    LR
+  48              	
+  49              	  .end...
+DEFINED SYMBOLS
+         ./src/lcm.s:8      .text:0000000000000000 Main
+         ./src/lcm.s:24     .text:0000000000000000 $t
+         ./src/lcm.s:25     .text:0000000000000004 WhileState
+         ./src/lcm.s:42     .text:0000000000000030 EndWhileState
+         ./src/lcm.s:46     .text:0000000000000030 End_Main
+
+NO UNDEFINED SYMBOLS

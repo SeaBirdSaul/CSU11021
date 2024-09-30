@@ -1,0 +1,194 @@
+   1              	# 0 "./src/calculator.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1696-calculator//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 7
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	  @load from mem
+  14              	  @get num1
+  15              	  @check sign/store sign
+  16              	  @get num 2
+  17              	  @check if there is a second sign or if it ends
+  18              	  @if second sign, store second sign
+  19              	  @then do first calc and store in num 1 place
+  20              	  @get num3 and store in num 2
+  21              	  @check sign and do thing
+  22              	  @end
+  23              	  @else do first sign
+  24              	  @end
+  25              	  
+  26              	  @R1 = MEMYOKE
+  27              	  @R2 = HOLDERNUM
+  28              	  @R3 = NUM1
+  29              	  @R4 = SIGN1
+  30              	  @R5 = NUM2 
+  31              	  @R6 = SIGN2
+  32              	  @R10 = 10
+  33              	
+  34 0000 4FF00A0A 	  MOV R10, #10
+  35 0004 0A78     	  LDRB R2, [R1]
+  36 0006 04E0     	  B    getNum1Loop
+  37              	getNum1:
+  38 0008 4FF00003 	  MOV R3, #0
+  39 000c 01F10101 	  ADD R1, R1, #1
+  40 0010 0A78     	  LDRB R2, [R1]
+  41              	getNum1Loop:
+  42 0012 A2F13002 	  SUB R2, R2, #0x30
+  43 0016 1344     	  ADD R3, R3, R2
+  44 0018 01F10101 	  ADD R1, R1, #1
+  45 001c 0A78     	  LDRB R2, [R1]
+  46 001e 302A     	  CMP R2, #0x30
+  47 0020 04DB     	  BLT checkSign
+  48 0022 392A     	  CMP R2, #0x39
+  49 0024 02DC     	  BGT checkSign
+  50 0026 03FB0AF3 	  MUL R3, R3, R10
+  51 002a F2E7     	  B   getNum1Loop
+  52              	
+  53              	checkSign:
+  54 002c 002A     	  CMP R2, #0x00
+  55 002e 55D0     	  BEQ EndLife
+  56 0030 1446     	  MOV R4, R2
+  57 0032 01F10101 	  ADD R1, R1, #1
+  58              	
+  59 0036 0A78     	  LDRB R2, [R1]
+  60              	getNum2:
+  61 0038 4FF00005 	  MOV R5, #0
+  62              	getNum2Loop:
+  63 003c A2F13002 	  SUB R2, R2, 0x30
+  64 0040 1544     	  ADD R5, R5, R2
+  65 0042 01F10101 	  ADD R1, R1, #1
+  66 0046 0A78     	  LDRB R2, [R1]
+  67 0048 302A     	  CMP R2, #0x30
+  68 004a 04DB     	  BLT checkSign2ElectricBoogaloo
+  69 004c 392A     	  CMP R2, #0x39
+  70 004e 02DC     	  BGT checkSign2ElectricBoogaloo
+  71 0050 05FB0AF5 	  MUL R5, R5, R10
+  72 0054 F2E7     	  B   getNum2Loop
+  73              	
+  74              	@can be editted to for hex
+  75              	checkSign2ElectricBoogaloo: 
+  76 0056 002A     	  CMP R2, #0x00
+  77 0058 02D0     	  BEQ performSurgery
+  78 005a 1646     	  MOV R6, R2
+  79 005c 01F10101 	  ADD R1, R1, #1
+  80              	
+  81              	performSurgery:
+  82 0060 2B2C     	  CMP R4, '+'
+  83 0062 03D0     	  BEQ doAddition
+  84 0064 2D2C     	  CMP R4, '-'
+  85 0066 06D0     	  BEQ doSubtraction
+  86 0068 2A2C     	  CMP R4, '*'
+  87 006a 09D0     	  BEQ doMultiplication
+  88              	
+  89              	doAddition:
+  90 006c 03EB0500 	  ADD R0, R3, R5 
+  91 0070 002E     	  CMP R6, #0
+  92 0072 34D0     	  BEQ EndLife2ElectricBoogaloo
+  93 0074 09E0     	  B   getNum3
+  94              	
+  95              	doSubtraction:
+  96 0076 A3EB0500 	  SUB R0, R3, R5 
+  97 007a 002E     	  CMP R6, #0
+  98 007c 2FD0     	  BEQ EndLife2ElectricBoogaloo
+  99 007e 04E0     	  B   getNum3
+ 100              	
+ 101              	doMultiplication:
+ 102 0080 03FB05F0 	  MUL R0, R3, R5 
+ 103 0084 002E     	  CMP R6, #0
+ 104 0086 2AD0     	  BEQ EndLife2ElectricBoogaloo
+ 105 0088 FFE7     	  B   getNum3
+ 106              	
+ 107              	getNum3:
+ 108 008a 0A78     	  LDRB R2, [R1]
+ 109 008c 4FF00003 	  MOV R3, #0
+ 110              	getNum3Loop:
+ 111 0090 A2F13002 	  SUB R2, R2, #0x30
+ 112 0094 1344     	  ADD R3, R3, R2
+ 113 0096 01F10101 	  ADD R1, R1, #1
+ 114 009a 0A78     	  LDRB R2, [R1]
+ 115 009c 302A     	  CMP R2, #0x30
+ 116 009e 04DB     	  BLT checkSign3ElectricOrgy
+ 117 00a0 392A     	  CMP R2, #0x39
+ 118 00a2 02DC     	  BGT checkSign3ElectricOrgy
+ 119 00a4 03FB0AF3 	  MUL R3, R3, R10
+ 120 00a8 F2E7     	  B   getNum3Loop
+ 121              	
+ 122              	checkSign3ElectricOrgy: 
+ 123 00aa 002A     	  CMP R2, #0x00
+ 124 00ac 02D0     	  BEQ performSurgery2ElectricBoogaloo
+ 125 00ae 1446     	  MOV R4, R2
+ 126 00b0 01F10101 	  ADD R1, R1, #1
+ 127              	
+ 128              	performSurgery2ElectricBoogaloo:
+ 129 00b4 2B2C     	  CMP R4, '+'
+ 130 00b6 03D0     	  BEQ doAddition2ElectricBoogaloo
+ 131 00b8 2D2C     	  CMP R4, '-'
+ 132 00ba 05D0     	  BEQ doSubtraction2ElectricBoogaloo
+ 133 00bc 2A2C     	  CMP R4, '*'
+ 134 00be 08D0     	  BEQ doMultiplication2ElectricBoogaloo
+ 135              	
+ 136              	doAddition2ElectricBoogaloo:
+ 137 00c0 1844     	  ADD R0, R0, R3
+ 138 00c2 002A     	  CMP R2, #0
+ 139 00c4 0BD0     	  BEQ EndLife2ElectricBoogaloo
+ 140 00c6 E0E7     	  B   getNum3
+ 141              	
+ 142              	doSubtraction2ElectricBoogaloo:
+ 143 00c8 A0EB0300 	  SUB R0, R0, R3 
+ 144 00cc 002A     	  CMP R2, #0
+ 145 00ce 06D0     	  BEQ EndLife2ElectricBoogaloo
+ 146 00d0 DBE7     	  B   getNum3
+ 147              	
+ 148              	doMultiplication2ElectricBoogaloo:
+ 149 00d2 00FB03F0 	  MUL R0, R0, R3 
+ 150 00d6 002A     	  CMP R2, #0
+ 151 00d8 01D0     	  BEQ EndLife2ElectricBoogaloo
+ 152 00da D6E7     	  B   getNum3
+ 153              	
+ 154              	  
+ 155              	EndLife:
+ 156 00dc 1846     	  MOV R0, R3
+ 157              	
+ 158              	EndLife2ElectricBoogaloo:
+ 159              	  @ End of program ... check your result
+ 160              	
+ 161              	End_Main:
+ 162 00de 7047     	  BX    LR
+ 163              	
+ 164              	  .end...
+DEFINED SYMBOLS
+  ./src/calculator.s:8      .text:0000000000000000 Main
+  ./src/calculator.s:34     .text:0000000000000000 $t
+  ./src/calculator.s:41     .text:0000000000000012 getNum1Loop
+  ./src/calculator.s:37     .text:0000000000000008 getNum1
+  ./src/calculator.s:53     .text:000000000000002c checkSign
+  ./src/calculator.s:155    .text:00000000000000dc EndLife
+  ./src/calculator.s:60     .text:0000000000000038 getNum2
+  ./src/calculator.s:62     .text:000000000000003c getNum2Loop
+  ./src/calculator.s:75     .text:0000000000000056 checkSign2ElectricBoogaloo
+  ./src/calculator.s:81     .text:0000000000000060 performSurgery
+  ./src/calculator.s:89     .text:000000000000006c doAddition
+  ./src/calculator.s:95     .text:0000000000000076 doSubtraction
+  ./src/calculator.s:101    .text:0000000000000080 doMultiplication
+  ./src/calculator.s:158    .text:00000000000000de EndLife2ElectricBoogaloo
+  ./src/calculator.s:107    .text:000000000000008a getNum3
+  ./src/calculator.s:110    .text:0000000000000090 getNum3Loop
+  ./src/calculator.s:122    .text:00000000000000aa checkSign3ElectricOrgy
+  ./src/calculator.s:128    .text:00000000000000b4 performSurgery2ElectricBoogaloo
+  ./src/calculator.s:136    .text:00000000000000c0 doAddition2ElectricBoogaloo
+  ./src/calculator.s:142    .text:00000000000000c8 doSubtraction2ElectricBoogaloo
+  ./src/calculator.s:148    .text:00000000000000d2 doMultiplication2ElectricBoogaloo
+  ./src/calculator.s:161    .text:00000000000000de End_Main
+
+NO UNDEFINED SYMBOLS

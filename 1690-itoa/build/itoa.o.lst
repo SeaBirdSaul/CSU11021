@@ -1,0 +1,119 @@
+   1              	# 0 "./src/itoa.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1690-itoa//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 5
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14              	  @mov R1 to R2
+  15              	  @factor = 1
+  16              	  @if R2 = 0 
+  17              	  @store 0 in memory and end
+  18              	  @else if R2 > 0 
+  19              	  @then store '+' in mem 1
+  20              	  @else if R2 < 0
+  21              	  @store '-' in mem 1 
+  22              	  @mul R2 -1
+  23              	  @for R2 != 0
+  24              	  @if R2 divide 10(Factor) < 10
+  25              	  @converte ans to ascii
+  26              	  @store ascii in mem 2 
+  27              	  @R2 = R2 - (ans * 10Factor)
+  28              	  @Factor - 1
+  29              	  @mem +1
+  30              	  @loop
+  31              	  @else factor +1
+  32              	
+  33              	  @R2 = R1
+  34              	  @R3 = '0'
+  35              	  @R4 = '+'
+  36              	  @R5 = '-'
+  37              	  @R6 = -1
+  38              	  @R7 = 10Factor
+  39              	  @R8 = 10Factor
+  40              	  @R9 = ASCII
+  41              	  @R10 = ans * 10Factor
+  42              	  @R11 = ans
+  43              	  @R12 = 10
+  44              	  @R0 = mem
+  45 0000 4FF00A0C 	  MOV R12, #10
+  46 0004 4FF00107 	  MOV R7, #1
+  47 0008 4FF0FF36 	  MOV R6, #-1
+  48 000c 0A46     	  MOV R2, R1
+  49 000e 002A     	  CMP R2, #0
+  50 0010 2FD0     	  BEQ is0
+  51 0012 002A     	  CMP R2, #0
+  52 0014 25DB     	  BLT Negative
+  53 0016 4FF02B04 	  MOV R4, '+'
+  54 001a 0470     	  STRB R4, [R0]
+  55 001c 00F10100 	  ADD R0, R0, #1
+  56              	
+  57              	loop:
+  58 0020 002A     	  CMP R2, #0
+  59 0022 29D0     	  BEQ endLife
+  60 0024 0A2A     	  CMP R2, #10
+  61 0026 10DB     	  BLT lessThan10
+  62 0028 B2FBF7FB 	  UDIV R11, R2, R7
+  63 002c E345     	  CMP R11, R12
+  64 002e 15DC     	  BGT incFactor
+  65 0030 0BF13009 	  ADD R9, R11, #0X30
+  66 0034 80F80090 	  STRB R9, [R0]
+  67 0038 0BFB07FA 	  MUL R10, R11, R7 
+  68 003c A2EB0A02 	  SUB R2, R2, R10
+  69 0040 00F10100 	  ADD R0, R0, #1
+  70 0044 4FF00A07 	  MOV R7, #10
+  71 0048 EAE7     	  B   loop
+  72              	
+  73              	lessThan10:
+  74 004a 002A     	  CMP R2, #0
+  75 004c 14DD     	  BLE endLife
+  76 004e 02F13009 	  ADD R9, R2, #0X30
+  77 0052 80F80090 	  STRB R9, [R0]
+  78 0056 00F10100 	  ADD R0, R0, #1
+  79 005a 0DE0     	  B   endLife
+  80              	
+  81              	incFactor:
+  82 005c 07FB0CF7 	  MUL R7, R7, R12
+  83 0060 DEE7     	  B   loop
+  84              	
+  85              	Negative:
+  86 0062 4FF02D05 	  MOV R5, '-'
+  87 0066 0570     	  STRB R5, [R0]
+  88 0068 02FB06F2 	  MUL R2, R2, R6
+  89 006c 00F10100 	  ADD R0, R0, #1
+  90 0070 D6E7     	  B  loop
+  91              	
+  92              	is0:
+  93 0072 4FF03003 	  MOV R3, '0'
+  94 0076 0370     	  STRB R3, [R0]
+  95              	
+  96              	endLife:
+  97              	  @ End of program ... check your result
+  98              	
+  99              	End_Main:
+ 100 0078 7047     	  BX    LR
+ 101              	
+ 102              	  .end...
+DEFINED SYMBOLS
+        ./src/itoa.s:8      .text:0000000000000000 Main
+        ./src/itoa.s:45     .text:0000000000000000 $t
+        ./src/itoa.s:92     .text:0000000000000072 is0
+        ./src/itoa.s:85     .text:0000000000000062 Negative
+        ./src/itoa.s:57     .text:0000000000000020 loop
+        ./src/itoa.s:96     .text:0000000000000078 endLife
+        ./src/itoa.s:73     .text:000000000000004a lessThan10
+        ./src/itoa.s:81     .text:000000000000005c incFactor
+        ./src/itoa.s:99     .text:0000000000000078 End_Main
+
+NO UNDEFINED SYMBOLS

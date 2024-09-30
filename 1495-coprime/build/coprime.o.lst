@@ -1,0 +1,86 @@
+   1              	# 0 "./src/coprime.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1495-coprime//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 4
+  11              	
+  12              	  @ *** your program goes here ***r
+  13              	
+  14              	@Setting a = R2 and b = R3
+  15              	ATo0:
+  16 0000 4FF00002 	  MOV R2, #0
+  17              	BTo0:
+  18 0004 4FF00003 	  MOV R3, #0
+  19              	AIncrese:
+  20 0008 8A42     	  CMP R2, R1
+  21 000a 30D0     	  BEQ EndGCD
+  22 000c 02F10102 	  ADD R2, #1
+  23 0010 02F10103 	  ADD R3, R2, #1 
+  24              	  
+  25              	BIncrese:
+  26 0014 8B42     	  CMP R3, R1
+  27 0016 F7D0     	  BEQ AIncrese
+  28 0018 03F10103 	  ADD R3, #1
+  29 001c 4FF00008 	  MOV R8, #0
+  30              	@lcm 
+  31 0020 4FF00007 	 MOV R7, #0
+  32              	StartLCM:
+  33 0024 B8F1000F 	  CMP R8, #0  @while result == 0 
+  34 0028 13D1     	  BNE EndLCM
+  35 002a 07F10107 	  ADD R7, #1 @ count++
+  36 002e B7FBF2F5 	  UDIV R5, R7, R2  @(num1 % count)
+  37 0032 05FB02F5 	  MUL R5, R5, R2 @(num1 % count)
+  38 0036 A7EB0505 	  SUB R5, R7, R5  @(num1 % count)
+  39 003a 002D     	  CMP R5, #0    @((num1 % count) == 0) 
+  40 003c F2D1     	  BNE StartLCM
+  41 003e B7FBF3F6 	  UDIV R6, R7, R3 @(num2 % count)
+  42 0042 06FB03F6 	  MUL R6, R6, R3  @(num2 % count)
+  43 0046 A7EB0606 	  SUB R6, R7, R6  @(num2 % count)
+  44 004a 002E     	  CMP R6, #0  @((num2 % count) == 0)
+  45 004c EAD1     	  BNE StartLCM
+  46 004e B846     	  MOV R8, R7  @		result = count;
+  47 0050 FFE7     	  B   EndLCM
+  48              	
+  49              	EndLCM:
+  50 0052 02FB03F9 	  MUL R9, R2, R3
+  51 0056 B9FBF8FA 	  UDIV  R10, R9, R8 @GCD
+  52 005a BAF1010F 	  CMP R10, #1 @is GCD = 1
+  53 005e D9D1     	  BNE BIncrese @if not increase b 
+  54 0060 00F10100 	  ADD R0, R0, #1 @result + 1
+  55 0064 8B42     	  CMP R3, R1 @is b = n
+  56 0066 D5D1     	  BNE BIncrese @if not increase b
+  57 0068 8A42     	  CMP R2, R1 @ is a = n
+  58 006a CDD1     	  BNE AIncrese @if not increase a
+  59 006c FFE7     	  B   EndGCD @ if a = n then end
+  60              	
+  61              	EndGCD:
+  62              	
+  63              	  @ End of program ... check your result
+  64              	
+  65              	End_Main:
+  66 006e 7047     	  BX    LR
+  67              	
+  68              	  .end...
+DEFINED SYMBOLS
+     ./src/coprime.s:8      .text:0000000000000000 Main
+     ./src/coprime.s:15     .text:0000000000000000 ATo0
+     ./src/coprime.s:16     .text:0000000000000000 $t
+     ./src/coprime.s:17     .text:0000000000000004 BTo0
+     ./src/coprime.s:19     .text:0000000000000008 AIncrese
+     ./src/coprime.s:61     .text:000000000000006e EndGCD
+     ./src/coprime.s:25     .text:0000000000000014 BIncrese
+     ./src/coprime.s:32     .text:0000000000000024 StartLCM
+     ./src/coprime.s:49     .text:0000000000000052 EndLCM
+     ./src/coprime.s:65     .text:000000000000006e End_Main
+
+NO UNDEFINED SYMBOLS

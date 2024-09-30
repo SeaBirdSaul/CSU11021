@@ -1,0 +1,66 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1695-mode//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	  .global  testSeq
+   8              	  .global  newSeq
+   9              	
+  10              	
+  11              	
+  12              	@
+  13              	@ Subroutine to initialise test inputs
+  14              	@
+  15              	  .section  .text
+  17              	Init_Test:
+  18 0000 4DF804ED 	  STMFD   SP!, {LR}
+  19 0004 0149     	  LDR     R1, =testSeq   @ Start address of test sequence (in ROM)
+  20 0006 024A     	  LDR     R2, =newSeq    @ Start address (in RAM) of space for new sequence
+  21 0008 5DF804FB 	  LDMFD   SP!, {PC}
+  22              	
+  23              	
+  24              	
+  25              	@
+  26              	@ Test data (in ROM)
+  27              	@
+  28              	  .section  .rodata
+  29              	
+  30              	testSeq:
+  31 0000 05000000 	  .word   5
+  32 0004 0D000F00 	  .hword  13, 15, 15, 13, 11
+  32      0F000D00 
+  32      0B00
+  33              	
+  34              	
+  35              	
+  36              	@
+  37              	@ Space in RAM for copied sequence
+  38              	@
+  39              	  .section .data
+  40              	
+  41              	newSeq:
+  42 0000 00000000 	  .space  4
+  43              	newValues:
+  44 0004 00000000 	  .space  256
+  44      00000000 
+  44      00000000 
+  44      00000000 
+  44      00000000 
+  45              	
+  46              	.end
+DEFINED SYMBOLS
+        ./src/test.s:17     .text:0000000000000000 Init_Test
+        ./src/test.s:30     .rodata:0000000000000000 testSeq
+        ./src/test.s:41     .data:0000000000000000 newSeq
+        ./src/test.s:18     .text:0000000000000000 $t
+        ./src/test.s:42     .data:0000000000000000 $d
+        ./src/test.s:43     .data:0000000000000004 newValues
+        ./src/test.s:46     .text:000000000000000c $d
+
+NO UNDEFINED SYMBOLS
