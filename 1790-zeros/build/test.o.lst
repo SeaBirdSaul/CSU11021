@@ -1,0 +1,28 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1790-zeros//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	
+   8              	  .section  .text
+   9              	  
+  11              	Init_Test:
+  12              	
+  13              	  @ Test value
+  14 0000 0049     	  LDR   R1, =0xD4202363
+  15              	
+  16 0002 7047     	  BX    LR
+  17              	
+  18 0004 632320D4 	.end
+DEFINED SYMBOLS
+        ./src/test.s:11     .text:0000000000000000 Init_Test
+        ./src/test.s:14     .text:0000000000000000 $t
+        ./src/test.s:18     .text:0000000000000004 $d
+
+NO UNDEFINED SYMBOLS

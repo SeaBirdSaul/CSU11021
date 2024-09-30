@@ -1,0 +1,278 @@
+   1              	# 0 "./src/exam.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1910-exam//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @
+  11              	  @ Follow the instructions given in the examination paper
+  12              	  @
+  13              	  @ The address of string A is in register R1
+  14              	  @ The address of string B is in register R2
+  15              	  @
+  16              	  @ To aid your debugging using Visual Studio Code:
+  17              	  @ 
+  18              	  @   - string A will be in RAM at 0x20000000
+  19              	  @   - string B will be in RAM at 0x20000080
+  20              	  @ 
+  21              	  @ (However, your program should not assume that strings A and B will always
+  22              	  @ be at the above addresses and Submitty may start your program with
+  23              	  @ different start addresses for Strings A and B in R1 and R2.)
+  24              	  @
+  25              	
+  26              	  @ *** your program goes here ***
+  27              	
+  28              	
+  29              	@PART1 - PSUEDOCODE
+  30              	  @LOAD R1 -> R3
+  31              	  @LOAD R2 -> R4
+  32              	  @WHILE R1 != 0 || R2 != 0
+  33              	  @CMP R1, R2
+  34              	  @BEQ INCANS
+  35              	  @R1++
+  36              	  @R2++
+  37              	  @B WHILESTART
+  38              	
+  39              	  @INCANS
+  40              	  @R0++
+  41              	  @R1++
+  42              	  @R2++
+  43              	  @B WHILESTART 
+  44              	
+  45              	
+  46              	@PART2 - PSUEDOCODE
+  47              	  @GETLENGTH1 
+  48              	  @LOAD R1 -> R3
+  49              	  @CMP R3, 0
+  50              	  @BEQ ENDGETLENGTH1
+  51              	  @R12++
+  52              	  @R5++
+  53              	  @R1++
+  54              	  @B   GETLENGTH1
+  55              	
+  56              	  @ENDGTLENGTH1
+  57              	  @SUB R1, R5
+  58              	
+  59              	  @MOV R5, 0
+  60              	  @GETLENGTH2
+  61              	  @LOAD R2 -> R4
+  62              	  @CMP R4, 0
+  63              	  @BEQ ENDGETLENGTH2
+  64              	  @R12++
+  65              	  @R6++
+  66              	  @R2++
+  67              	  @B   GETLENGTH2
+  68              	
+  69              	  @ENDGTLENGTH1
+  70              	  @SUB R2, R12
+  71              	
+  72              	  @LOAD R1 -> R3
+  73              	  @LOAD R2 -> R4
+  74              	  @WHILE R7 != R5 
+  75              	  @IF R8 = R5
+  76              	  @R7++
+  77              	  @SUB R2, R8
+  78              	  @R8 -> 0
+  79              	  @CMP R3, R4
+  80              	  @BEQ INCANS
+  81              	  @R2++
+  82              	  @B WHILESTART
+  83              	
+  84              	  @INCANS
+  85              	  @R0++
+  86              	  @R1++
+  87              	  @R2++
+  88              	  @B WHILESTART 
+  89              	
+  90              	@PART3 - PSEUDOCODE
+  91              	
+  92              	@GETLENGTH1 
+  93              	  @LOAD R1 -> R3
+  94              	  @CMP R3, 0
+  95              	  @BEQ ENDGETLENGTH1
+  96              	  @R12++
+  97              	  @R5++
+  98              	  @R1++
+  99              	  @B   GETLENGTH1
+ 100              	
+ 101              	  @ENDGTLENGTH1
+ 102              	  @SUB R1, R5
+ 103              	
+ 104              	  @MOV R12, 0
+ 105              	  @GETLENGTH2
+ 106              	  @LOAD R2 -> R4
+ 107              	  @CMP R4, 0
+ 108              	  @BEQ ENDGETLENGTH2
+ 109              	  @R12++
+ 110              	  @R6++
+ 111              	  @R2++
+ 112              	  @B   GETLENGTH2
+ 113              	
+ 114              	  @ENDGTLENGTH1
+ 115              	  @SUB R2, R12
+ 116              	
+ 117              	  @MOV 0 -> R0
+ 118              	  @LOAD R1 -> R3
+ 119              	  @LOAD R2 -> R4
+ 120              	  @WHILE R7 != R5
+ 121              	  @IF R8 = R5
+ 122              	  @R7++
+ 123              	  @SUB R2, R8
+ 124              	  @R8 -> 0
+ 125              	  @CMP R3, R4
+ 126              	  @BEQ INCANS
+ 127              	  @R2++
+ 128              	  @R8++
+ 129              	  @B WHILESTART
+ 130              	
+ 131              	  @INCANS
+ 132              	  @R11++
+ 133              	  @R1++
+ 134              	  @R7++
+ 135              	  @R2++
+ 136              	  @R8++
+ 137              	  @IF R11>R10
+ 138              	  @R11 = R10
+ 139              	  @B WHILESTART 
+ 140              	
+ 141              	  @INCR7
+ 142              	  @R7++
+ 143              	  @R1++
+ 144              	  @R2 = R2 - R6
+ 145              	  @R8 == 0
+ 146              	  @R11 == 0
+ 147              	  @B WHILESTART
+ 148              	
+ 149              	
+ 150              	  @ENDLIFE
+ 151              	  @IF R11>R10
+ 152              	  @R0 = R11
+ 153              	  @ELSEIF R10>R11
+ 154              	  @R0 = R10
+ 155              	
+ 156              	
+ 157              	  @ R0 = ANS
+ 158              	  @ R1 = STRING1
+ 159              	  @ R2 = STRING2
+ 160              	  @ R3 = LOADEDVALUE1
+ 161              	  @ R4 = LOADEDVALUE2
+ 162              	  @ R5 = LENGTHSTRING1
+ 163              	  @ R6 = LENGTHSTRING2
+ 164              	  @ R7 = COUNTERSTRING1
+ 165              	  @ R8 = COUNTERSTRING2
+ 166              	  @ R11 = TEMPANS
+ 167              	  @ R12 = COUNTER
+ 168              	
+ 169              	
+ 170              	getLength1:
+ 171 0000 0B78     	  LDRB R3, [R1]
+ 172 0002 002B     	  CMP R3, #0X0
+ 173 0004 06D0     	  BEQ endGetLength1
+ 174 0006 0CF1010C 	  ADD R12, #1
+ 175 000a 05F10105 	  ADD R5, #1
+ 176 000e 01F10101 	  ADD R1, #1
+ 177 0012 F5E7     	  B   getLength1
+ 178              	
+ 179              	endGetLength1:
+ 180 0014 A1EB0C01 	  SUB R1, R1, R12
+ 181              	
+ 182              	
+ 183 0018 4FF0000C 	  MOV R12, #0
+ 184              	getLength2:
+ 185 001c 1478     	  LDRB R4, [R2]
+ 186 001e 002C     	  CMP R4, #0X0
+ 187 0020 06D0     	  BEQ endGetLength2
+ 188 0022 0CF1010C 	  ADD R12, #1
+ 189 0026 06F10106 	  ADD R6, #1
+ 190 002a 02F10102 	  ADD R2, #1
+ 191 002e F5E7     	  B   getLength2
+ 192              	
+ 193              	endGetLength2:
+ 194 0030 A2EB0C02 	  SUB R2, R2, R12
+ 195              	
+ 196              	
+ 197 0034 4FF00000 	  MOV R0, #0
+ 198              	whileStart:
+ 199 0038 0B78     	  LDRB R3, [R1]
+ 200 003a 1478     	  LDRB R4, [R2]
+ 201 003c AF42     	  CMP R7, R5
+ 202 003e 22D0     	  BEQ EndLife
+ 203 0040 B045     	  CMP R8, R6
+ 204 0042 15D0     	  BEQ IncR7
+ 205 0044 A342     	  CMP R3, R4
+ 206 0046 04D0     	  BEQ IncAns
+ 207 0048 02F10102 	  ADD R2, R2, #1
+ 208 004c 08F10108 	  ADD R8, R8, #1
+ 209 0050 F2E7     	  B   whileStart
+ 210              	
+ 211              	
+ 212              	IncAns:
+ 213 0052 0BF1010B 	  ADD R11, R11, #1
+ 214 0056 01F10101 	  ADD R1, R1, #1
+ 215 005a 07F10107 	  ADD R7, R7, #1
+ 216 005e 02F10102 	  ADD R2, R2, #1
+ 217 0062 08F10108 	  ADD R8, R8, #1
+ 218 0066 D345     	  CMP R11, R10
+ 219 0068 00DC     	  BGT ChangeR11
+ 220 006a E5E7     	  B   whileStart
+ 221              	
+ 222              	ChangeR11:
+ 223 006c DA46     	  MOV R10, R11
+ 224 006e E3E7     	  B   whileStart
+ 225              	
+ 226              	IncR7:
+ 227 0070 07F10107 	  ADD R7, R7, #1
+ 228 0074 01F10101 	  ADD R1, R1, #1
+ 229 0078 A2EB0602 	  SUB R2, R2, R6
+ 230 007c 4FF00008 	  MOV R8, #0
+ 231 0080 4FF0000B 	  MOV R11, #0
+ 232 0084 D8E7     	  B   whileStart
+ 233              	
+ 234              	
+ 235              	EndLife:
+ 236 0086 D345     	  CMP R11, R10
+ 237 0088 01DC     	  BGT MOVR11TOR0
+ 238 008a DA45     	  CMP R10, R11
+ 239 008c 01DC     	  BGT MOVR10TOR0
+ 240              	
+ 241              	MOVR11TOR0:
+ 242 008e 5846     	  MOV R0, R11
+ 243 0090 01E0     	  B   EndLife2ElectricBoogaloo
+ 244              	
+ 245              	MOVR10TOR0:
+ 246 0092 5046     	  MOV R0, R10
+ 247 0094 FFE7     	  B   EndLife2ElectricBoogaloo
+ 248              	
+ 249              	EndLife2ElectricBoogaloo:
+ 250              	
+ 251              	
+ 252              	End_Main:
+ 253 0096 7047     	  BX    LR
+ 254              	
+ 255              	  .end...
+DEFINED SYMBOLS
+        ./src/exam.s:8      .text:0000000000000000 Main
+        ./src/exam.s:170    .text:0000000000000000 getLength1
+        ./src/exam.s:171    .text:0000000000000000 $t
+        ./src/exam.s:179    .text:0000000000000014 endGetLength1
+        ./src/exam.s:184    .text:000000000000001c getLength2
+        ./src/exam.s:193    .text:0000000000000030 endGetLength2
+        ./src/exam.s:198    .text:0000000000000038 whileStart
+        ./src/exam.s:235    .text:0000000000000086 EndLife
+        ./src/exam.s:226    .text:0000000000000070 IncR7
+        ./src/exam.s:212    .text:0000000000000052 IncAns
+        ./src/exam.s:222    .text:000000000000006c ChangeR11
+        ./src/exam.s:241    .text:000000000000008e MOVR11TOR0
+        ./src/exam.s:245    .text:0000000000000092 MOVR10TOR0
+        ./src/exam.s:249    .text:0000000000000096 EndLife2ElectricBoogaloo
+        ./src/exam.s:252    .text:0000000000000096 End_Main
+
+NO UNDEFINED SYMBOLS

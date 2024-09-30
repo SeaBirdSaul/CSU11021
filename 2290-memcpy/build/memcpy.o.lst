@@ -1,0 +1,42 @@
+   1              	# 0 "./src/memcpy.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2290-memcpy//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	 
+  10 0000 1446     	  MOV R4, R2
+  11              	.LwhMemCpy:
+  12 0002 282C     	  CMP     R4, #40        
+  13 0004 06D3     	  BLO     .LeWhMemCpy 
+  14 0006 B1E8EC1F 	  LDMIA   R1!, {R2, R3, R5-R12} 
+  15 000a A0E8EC1F 	  STMIA   R0!, {R2, R3, R5-R12}  
+  16 000e A4F12804 	  SUB     R4, R4, #40
+  17 0012 F6E7     	  B       .LwhMemCpy    
+  18              	.LeWhMemCpy:
+  19              	
+  20              	 @Original Johnny code
+  21 0014 002C     	  CMP     R4, #0
+  22 0016 06DD     	  BLE     End_Main
+  23 0018 11F8012B 	  LDRB    R2, [R1], #1
+  24 001c 00F8012B 	  STRB    R2, [R0], #1
+  25 0020 A4F10104 	  SUB     R4, R4, #1
+  26 0024 F6E7     	  B       .LeWhMemCpy
+  27              	
+  28              	End_Main:
+  29 0026 7047     	  BX    LR
+  30              	
+  31              	  .end...
+DEFINED SYMBOLS
+      ./src/memcpy.s:8      .text:0000000000000000 Main
+      ./src/memcpy.s:10     .text:0000000000000000 $t
+      ./src/memcpy.s:28     .text:0000000000000026 End_Main
+
+NO UNDEFINED SYMBOLS

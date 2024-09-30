@@ -1,0 +1,133 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1910-exam//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	  .global  stringA
+   8              	  .global  stringB
+   9              	
+  10              	
+  11              	
+  12              	@
+  13              	@ Subroutine to initialise test inputs
+  14              	@
+  15              	  .section  .text
+  17              	Init_Test:
+  18 0000 4DF804ED 	  STMFD SP!, {LR}
+  19 0004 00F004F8 	  BL    InitRam               @ Copy initial RAM contents from ROM
+  20 0008 0C49     	  LDR   R1, =stringA          @ Start address for string A in RAM
+  21 000a 0D4A     	  LDR   R2, =stringB          @ Start address for string B in RAM
+  22 000c 5DF804FB 	  LDMFD SP!, {PC}
+  23              	
+  24              	
+  25              	
+  26              	@
+  27              	@ Initial test strings
+  28              	@
+  29              	@ This initial data will be copied from ROM to
+  30              	@   to RAM before your program starts.
+  31              	@
+  32              	  .section  .rodata
+  33              	@ Initial contents of test string A
+  34              	init_stringA:
+  35              	  @ .asciz    "ABCWXYZ"         @ Test Part 1 (comment to test other parts)
+  36              	  @ .asciz    "ABCDWXYZ"      @ Uncomment to test Part 2
+  37 0000 41424344 	   .asciz    "ABCDWXABCDEYZ" @ Uncomment to test Part 3 and Part 4
+  37      57584142 
+  37      43444559 
+  37      5A00
+  38              	
+  39              	@ Initial contents of test string B
+  40              	init_stringB:
+  41              	  @ .asciz    "ABCPQRST"         @ Test Part 1 (comment to test other parts)
+  42              	  @ .asciz    "ABCPQABCDRST"   @ Uncomment to test Part 2
+  43 000e 41424350 	   .asciz    "ABCPQABCDERST"  @ Uncomment to test Part 3 and Part 4
+  43      51414243 
+  43      44455253 
+  43      5400
+  44              	
+  45              	
+  46              	
+  47              	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  48              	@ IT IS RECOMMENDED THAT YOU DO NOT MODIFY BELOW THIS LINE @
+  49              	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  50              	
+  51              	  .section  .data
+  52              	stringA:
+  53 0000 00000000 	  .space  128
+  53      00000000 
+  53      00000000 
+  53      00000000 
+  53      00000000 
+  54              	
+  55              	stringB:
+  56 0080 00000000 	  .space  128
+  56      00000000 
+  56      00000000 
+  56      00000000 
+  56      00000000 
+  57              	
+  58              	
+  59              	
+  60              	@ InitRam subroutine
+  61              	@ Utility subroutine to initialise RAM from ROM
+  62              	  .section  .text
+  64              	InitRam:
+  65              	
+  66 0010 4DF804ED 	  STMFD   SP!, {LR}
+  67              	  
+  68 0014 0B49     	  LDR   R1, =init_stringA     @ start address of initial stringA in ROM
+  69 0016 0948     	  LDR   R0, =stringA          @ address for stringA in RAM
+  70 0018 00F006F8 	  BL    StrCpy  
+  71              	
+  72 001c 0A49     	  LDR   R1, =init_stringB     @ start address of initial stringB in ROM
+  73 001e 0848     	  LDR   R0, =stringB          @ address for stringB in RAM
+  74 0020 00F002F8 	  BL    StrCpy
+  75              	
+  76 0024 5DF804FB 	  LDMFD   SP!, {PC}
+  77              	
+  78              	
+  79              	
+  80              	@ StrCpy subroutine
+  81              	@ Copies a NULL-terminated ASCII string
+  82              	@
+  83              	@ Parameters:
+  84              	@   R0: destination address
+  85              	@   R1: source address
+  86              	  .section  .text
+  88              	StrCpy:
+  89              	
+  90 0028 2DE91040 	  STMFD   SP!, {R4, LR}
+  91              	  
+  92              	whCpy:
+  93 002c 11F8014B 	  LDRB    R4, [R1], #1
+  94 0030 00F8014B 	  STRB    R4, [R0], #1
+  95 0034 002C     	  CMP     R4, #0
+  96 0036 F9D1     	  BNE     whCpy
+  97              	
+  98 0038 BDE81080 	  LDMFD   SP!, {R4, PC}
+  99              	
+ 100 003c 00000000 	.end
+ 100      00000000 
+ 100      00000000 
+ 100      0E000000 
+DEFINED SYMBOLS
+        ./src/test.s:17     .text:0000000000000000 Init_Test
+        ./src/test.s:52     .data:0000000000000000 stringA
+        ./src/test.s:55     .data:0000000000000080 stringB
+        ./src/test.s:18     .text:0000000000000000 $t
+        ./src/test.s:64     .text:0000000000000010 InitRam
+        ./src/test.s:34     .rodata:0000000000000000 init_stringA
+        ./src/test.s:40     .rodata:000000000000000e init_stringB
+        ./src/test.s:53     .data:0000000000000000 $d
+        ./src/test.s:88     .text:0000000000000028 StrCpy
+        ./src/test.s:92     .text:000000000000002c whCpy
+        ./src/test.s:100    .text:000000000000003c $d
+
+NO UNDEFINED SYMBOLS

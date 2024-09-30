@@ -1,0 +1,68 @@
+   1              	# 0 "./src/zeros.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1790-zeros//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 8
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14              	  @R2 = currentLength
+  15              	  @R0 = longestBoi
+  16              	  @R3 = loopCounter
+  17 0000 4FF00000 	  MOV R0, #0
+  18 0004 4FF00003 	  MOV R3, #0
+  19              	preWhile:
+  20 0008 4FF00002 	  MOV R2, #0
+  21              	
+  22              	While:
+  23 000c 03F10103 	  ADD R3, R3, #1
+  24 0010 4900     	  MOVS R1, R1, LSL #1
+  25 0012 06D2     	  BCS checkLength 
+  26 0014 0029     	  CMP R1, #0
+  27 0016 0AD0     	  BEQ EndLife
+  28 0018 02F10102 	  ADD R2, R2, #1
+  29 001c 212B     	  CMP R3, #33
+  30 001e 00D0     	  BEQ checkLength
+  31 0020 F4E7     	  B   While
+  32              	
+  33              	checkLength:
+  34 0022 8242     	  CMP R2, R0
+  35 0024 F0DB     	  BLT preWhile
+  36 0026 1046     	  MOV R0, R2
+  37 0028 212B     	  CMP R3, #33
+  38 002a 00D0     	  BEQ EndLife
+  39 002c ECE7     	  B   preWhile
+  40              	
+  41              	EndLife:
+  42              	
+  43              	
+  44              	
+  45              	
+  46              	
+  47              	
+  48              	  @ End of program ... check your result
+  49              	
+  50              	End_Main:
+  51 002e 7047     	  BX    LR
+  52              	
+  53              	  .end...
+DEFINED SYMBOLS
+       ./src/zeros.s:8      .text:0000000000000000 Main
+       ./src/zeros.s:17     .text:0000000000000000 $t
+       ./src/zeros.s:19     .text:0000000000000008 preWhile
+       ./src/zeros.s:22     .text:000000000000000c While
+       ./src/zeros.s:33     .text:0000000000000022 checkLength
+       ./src/zeros.s:41     .text:000000000000002e EndLife
+       ./src/zeros.s:50     .text:000000000000002e End_Main
+
+NO UNDEFINED SYMBOLS

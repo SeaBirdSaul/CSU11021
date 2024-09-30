@@ -1,0 +1,128 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2180-bubblesort//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	
+   8              	@
+   9              	@ Subroutine to initialise test inputs
+  10              	@
+  11              	  .section  .text
+  13              	Init_Test:
+  14 0000 4DF804ED 	  STMFD SP!, {LR}
+  15              	
+  16              	  @ Test initialisation
+  17 0004 00F004F8 	  BL    InitRam       @ Initialise RAM contents from ROM
+  18 0008 0E48     	  LDR   R0, =testValues
+  19 000a 0F49     	  LDR   R1, =countTestValues
+  20              	
+  21              	
+  22              	
+  23 000c 5DF804FB 	  LDMFD SP!, {PC}
+  24              	
+  25              	
+  26              	@
+  27              	@ Initialisation data
+  28              	@
+  29              	@ Read-only data that will be copied from ROM to RAM on program start
+  30              	@
+  31              	  .section  .rodata
+  32              	init_data_start:
+  33              	
+  34              	@ testValues
+  35              	init_testValues_start:
+  36              	  .equ testValues, .-init_data_start+rw_data_start
+  37 0000 04000000 	  .word  4, 1, 7, 12, 11, 10, 3, 9, 8, 2, 6, 5  @ <-- MODIFY TEST VALUES
+  37      01000000 
+  37      07000000 
+  37      0C000000 
+  37      0B000000 
+  38              	  .equ countTestValues, (.-init_testValues_start) >> 2
+  39              	
+  40              	.equ init_data_size, .-init_data_start
+  41              	
+  42              	
+  43              	
+  44              	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  45              	@ IT IS RECOMMENDED THAT YOU DO NOT MODIFY BELOW THIS LINE @
+  46              	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  47              	
+  48              	  .section  .data
+  49              	rw_data_start:
+  50 0000 00000000 	  .space    init_data_size
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  50      00000000 
+  51              	
+  52              	
+  53              	
+  54              	@ InitRam subroutine
+  55              	@ Utility subroutine to initialise RAM from ROM
+  56              	  .section  .text
+  58              	InitRam:
+  59              	
+  60 0010 2DE90740 	  STMFD   SP!, {R0-R2,LR}
+  61              	  
+  62 0014 0D49     	  LDR   R1, =init_data_start  @ start address of RAM initial data
+  63 0016 0E48     	  LDR   R0, =rw_data_start    @ address for RAM data
+  64 0018 4FF03002 	  LDR   R2, =init_data_size   @ size (bytes) initial RAM data
+  65 001c 00F002F8 	  BL    MemCpy  
+  66              	
+  67 0020 BDE80780 	  LDMFD   SP!, {R0-R2,PC}
+  68              	
+  69              	
+  70              	
+  71              	@ MemCpy subroutine
+  72              	@ Copies memory
+  73              	@
+  74              	@ Parameters:
+  75              	@   R0: destination address
+  76              	@   R1: source address
+  77              	@   R2: bytes
+  78              	  .section  .text
+  80              	MemCpy:
+  81              	
+  82 0024 2DE93040 	  STMFD   SP!, {R4-R5, LR}
+  83              	
+  84 0028 4FF00004 	  MOV     R4, #0
+  85              	whMemCpy:
+  86 002c 9442     	  CMP     R4, R2
+  87 002e 06D8     	  BHI     eWhMemCpy
+  88 0030 11F8015B 	  LDRB    R5, [R1], #1
+  89 0034 00F8015B 	  STRB    R5, [R0], #1
+  90 0038 04F10104 	  ADD     R4, R4, #1
+  91 003c F6E7     	  B       whMemCpy
+  92              	eWhMemCpy:
+  93              	
+  94 003e BDE83080 	  LDMFD   SP!, {R4-R5, PC}
+  95              	
+  96 0042 00000000 	.end...
+  96      00000C00 
+  96      00000000 
+  96      00000000 
+  96      0000
+DEFINED SYMBOLS
+        ./src/test.s:13     .text:0000000000000000 Init_Test
+        ./src/test.s:14     .text:0000000000000000 $t
+        ./src/test.s:58     .text:0000000000000010 InitRam
+                            .data:0000000000000000 testValues
+                            *ABS*:000000000000000c countTestValues
+        ./src/test.s:32     .rodata:0000000000000000 init_data_start
+        ./src/test.s:35     .rodata:0000000000000000 init_testValues_start
+        ./src/test.s:49     .data:0000000000000000 rw_data_start
+        ./src/test.s:40     *ABS*:0000000000000030 init_data_size
+        ./src/test.s:50     .data:0000000000000000 $d
+        ./src/test.s:80     .text:0000000000000024 MemCpy
+        ./src/test.s:85     .text:000000000000002c whMemCpy
+        ./src/test.s:92     .text:000000000000003e eWhMemCpy
+        ./src/test.s:96     .text:0000000000000042 $d
+        ./src/test.s:96     .text:0000000000000044 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,65 @@
+   1              	# 0 "./src/bubblesort.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2180-bubblesort//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	@
+  11              	@ Implement the well-known bubblesort algorithm to sort a sequence
+  12              	@ of word-size values in ascending order. The values should be sorted
+  13              	@ 'in-place', overwriting the original sequence. A pseudocode description
+  14              	@ of 'bubblesort' is provided below for convenience.
+  15              	@
+  16              	@ The sequence of values ('array' below) begins in memory at the address in R0.
+  17              	@ The number of values in the sequence (variable 'n' below) is in R1.
+  18              	@
+  19              	@ do {
+  20              	@   swapped = false;
+  21              	@   for (i = 1; i < n; i++) {
+  22              	@     if (array[i−1] > array[i]) {
+  23              	@       tmpswap = array[i−1];
+  24              	@       array[i−1] = array[i];
+  25              	@       array[i] = tmpswap;
+  26              	@       swapped = true ;
+  27              	@     }
+  28              	@   }
+  29              	@   n = n - 1;
+  30              	@ } while ( swapped );
+  31              	@
+  32              	
+  33              	@R0 = array
+  34              	@R1 = n
+  35              	@R2 = swapped
+  36              	@R3 = i 
+  37              	@R4 = tempswap
+  38              	doWhile:
+  39 0000 4FF00002 	  MOV R2, #0@swapped=false
+  40 0004 4FF00103 	  MOV R3, #1 @i=1
+  41 0008 8B42     	  CMP R3, R1
+  42 000a 01D2     	  BHS endFor @i<n
+  43              	
+  44              	
+  45              	
+  46 000c 03F10103 	  ADD R3, R3, #1
+  47              	endFor:
+  48              	
+  49              	End_Main:
+  50 0010 7047     	  BX    LR
+  51              	
+  52              	  .end...
+DEFINED SYMBOLS
+  ./src/bubblesort.s:8      .text:0000000000000000 Main
+  ./src/bubblesort.s:38     .text:0000000000000000 doWhile
+  ./src/bubblesort.s:39     .text:0000000000000000 $t
+  ./src/bubblesort.s:47     .text:0000000000000010 endFor
+  ./src/bubblesort.s:49     .text:0000000000000010 End_Main
+
+NO UNDEFINED SYMBOLS

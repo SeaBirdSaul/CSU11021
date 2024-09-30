@@ -1,0 +1,220 @@
+   1              	# 0 "./src/magic.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\CollegeShite\\VS_Code\\CSU11021\\2190-magic//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Follow the instructions in the handout for Assignment 1
+  11              	
+  12              	  @ *** your program goes here ***
+  13              	
+  14              	  @R0 = OUTPUT
+  15              	  @R1 = RAM ADDRESS
+  16              	  @R2 = NUMBER OF ROWS/COLUMNS 
+  17              	  @R3 = INDEX
+  18              	  @R4 = COUNTER
+  19              	  @R5 = NUMFOVALUESFOUND 
+  20              	  @R6 = EVERYVALUE
+  21              	  @R7 = SOMEBOOBEAN
+  22              	  @R8 = N^2
+  23              	  @R9 = ARRAY[]
+  24              	  @R10 = ADDRESS SAVER
+  25              	  @R11 = MAGICCONSTANT
+  26              	  @R12 = VALUSE
+  27              	
+  28 0000 8A46     	  MOV R10, R1
+  29 0002 4FF00100 	  MOV R0, #1
+  30 0006 02FB02F8 	  MUL R8, R2, R2
+  31              	whileFirst:
+  32 000a 012E     	  CMP R6, #1
+  33 000c 16D0     	  BEQ endWhile1
+  34 000e 4FF00103 	  MOV R3, #1 
+  35              	startFirstFor:
+  36 0012 4345     	  CMP R3, R8
+  37 0014 0EDC     	  BGT endFirstFor
+  38 0016 4FF00004 	  MOV R4, #0
+  39              	startSecondFor:
+  40 001a 4445     	  CMP R4, R8
+  41 001c 07D0     	  BEQ endSecondFor
+  42              	startFirstIf:
+  43 001e 5AF82490 	  LDR R9, [R10, R4, LSL #2]
+  44 0022 04F10104 	  ADD R4, R4, #1 @increment counter
+  45 0026 4B45     	  CMP R3, R9
+  46 0028 F7D1     	  BNE startSecondFor
+  47 002a 05F10105 	  ADD R5, R5, #1
+  48              	endSecondFor:
+  49 002e 03F10103 	  ADD R3, R3, #1 @increment index
+  50 0032 EEE7     	  B   startFirstFor
+  51              	endFirstFor:
+  52 0034 4545     	  CMP R5, R8
+  53 0036 01D1     	  BNE endWhile1
+  54 0038 4FF00106 	  MOV R6, #1
+  55              	endWhile1:
+  56 003c 012E     	  CMP R6, #1
+  57 003e 01D0     	  BEQ afterIf
+  58 0040 4FF00000 	  MOV R0, #0
+  59              	afterIf:
+  60              	
+  61 0044 0028     	  CMP R0, #0
+  62 0046 00F08380 	  BEQ End_Main
+  63              	
+  64 004a 4FF00203 	  MOV R3, #2 @TEMP USING INDEX TO HOLD  A DIVISOR
+  65 004e C346     	  MOV R11, R8
+  66 0050 0BF1010B 	  ADD R11, R11, #1
+  67 0054 BBFBF3FB 	  UDIV R11, R11, R3
+  68 0058 0BFB02FB 	  MUL R11, R11, R2 @SET R11 TO THE MAGIC CONSTANT
+  69 005c 4FF00004 	  MOV R4, #0
+  70              	
+  71 0060 8A46     	  MOV R10, R1
+  72 0062 4FF00003 	  MOV R3, #0
+  73              	startRowsWhile:
+  74 0066 9342     	  CMP R3, R2
+  75 0068 16D2     	  BHS endRowsWhile
+  76 006a 4FF00004 	  MOV R4, #0
+  77 006e 4FF0000C 	  MOV R12, #0
+  78              	secondRowsWhile:
+  79 0072 03FB02F5 	  MUL R5, R3, R2
+  80 0076 2544     	  ADD R5, R5, R4
+  81 0078 5AF82590 	  LDR R9, [R10, R5, LSL #2]
+  82 007c CC44     	  ADD R12, R12, R9
+  83 007e 04F10104 	  ADD R4, R4, #1
+  84 0082 9442     	  CMP R4, R2
+  85 0084 F5D3     	  BLO secondRowsWhile 
+  86 0086 FFE7     	  B   endSecondRowsWhile
+  87              	endSecondRowsWhile:
+  88 0088 DC45     	  CMP R12, R11
+  89 008a 02D0     	  BEQ correctIf
+  90 008c 4FF00000 	  MOV R0, #0
+  91 0090 5EE0     	  B   End_Main
+  92              	correctIf:
+  93 0092 03F10103 	  ADD R3, R3, #1
+  94 0096 E6E7     	  B   startRowsWhile
+  95              	endRowsWhile:
+  96              	
+  97 0098 8A46     	  MOV R10, R1
+  98 009a 4FF00103 	  MOV R3, #1
+  99 009e 4FF00005 	  MOV R5, #0
+ 100              	startColumnsWhile:
+ 101 00a2 9342     	  CMP R3, R2
+ 102 00a4 19D8     	  BHI endColumnsWhile
+ 103 00a6 4FF00004 	  MOV R4, #0
+ 104 00aa 4FF0000C 	  MOV R12, #0
+ 105              	secondColumnsWhile:
+ 106 00ae 04FB02F5 	  MUL R5, R4, R2  
+ 107 00b2 5AF82590 	  LDR R9, [R10, R5, LSL #2]
+ 108 00b6 CC44     	  ADD R12, R12, R9
+ 109 00b8 04F10104 	  ADD R4, R4, #1
+ 110 00bc 05F10105 	  ADD R5, R5, #1
+ 111 00c0 05FB02F5 	  MUL R5, R5, R2
+ 112 00c4 1D44     	  ADD R5, R5, R3
+ 113 00c6 9442     	  CMP R4, R2
+ 114 00c8 F1D3     	  BLO secondColumnsWhile
+ 115              	endSecondColumnsWhile:
+ 116 00ca DC45     	  CMP R12, R11
+ 117 00cc 02D0     	  BEQ correctIf2ElectricBoogaloo
+ 118 00ce 4FF00000 	  MOV R0, #0
+ 119 00d2 3DE0     	  B   End_Main
+ 120              	correctIf2ElectricBoogaloo:
+ 121 00d4 03F10103 	  ADD R3, R3, #1
+ 122 00d8 E3E7     	  B   startColumnsWhile
+ 123              	endColumnsWhile:
+ 124              	
+ 125 00da 8A46     	  MOV R10, R1
+ 126 00dc 4FF0000C 	  MOV R12, #0
+ 127 00e0 4FF00103 	  MOV R3, #1
+ 128 00e4 4FF00005 	  MOV R5, #0
+ 129 00e8 4FF00004 	  MOV R4, #0
+ 130              	startDiagonalWhile:
+ 131 00ec 9342     	  CMP R3, R2
+ 132 00ee 13D8     	  BHI endDiagonalWhile
+ 133 00f0 04FB02F5 	  MUL R5, R4, R2  
+ 134 00f4 012C     	  CMP R4, #1
+ 135 00f6 00D3     	  BLO skip
+ 136 00f8 2544     	  ADD R5, R5, R4
+ 137              	skip:
+ 138 00fa 5AF82590 	  LDR R9, [R10, R5, LSL #2]
+ 139 00fe CC44     	  ADD R12, R12, R9
+ 140 0100 04F10104 	  ADD R4, R4, #1 @increment counter
+ 141 0104 9442     	  CMP R4, R2
+ 142 0106 F1D3     	  BLO startDiagonalWhile
+ 143 0108 DC45     	  CMP R12, R11
+ 144 010a 00D0     	  BEQ correctIfForDiagonal
+ 145 010c 20E0     	  B   End_Main
+ 146              	correctIfForDiagonal:
+ 147 010e 4FF00200 	  MOV R0, #2
+ 148 0112 03F10103 	  ADD R3, R3, #1
+ 149 0116 E9E7     	  B   startDiagonalWhile
+ 150              	endDiagonalWhile:
+ 151              	
+ 152              	  @R7 = N^2-INDEX
+ 153              	  @R12 = ARRAY[N^2-INDEX]
+ 154              	  @R4 = N^2/2
+ 155              	  @R6 = N^2-INDEX
+ 156              	  @R11 = N^2+1
+ 157              	
+ 158 0118 8A46     	  MOV R10, R1
+ 159 011a 4FF00003 	  MOV R3, #0
+ 160 011e 4FF00204 	  MOV R4, #2
+ 161 0122 B8FBF4F4 	  UDIV R4, R8, R4
+ 162 0126 08F1010B 	  ADD R11, R8, #1
+ 163              	finalFor:
+ 164 012a A342     	  CMP R3, R4
+ 165 012c 0DD0     	  BEQ endFinalFor
+ 166              	finalIf:
+ 167 012e 5AF82390 	  LDR R9, [R10, R3, LSL #2]
+ 168 0132 A8EB0306 	  SUB R6, R8, R3
+ 169 0136 A6F10106 	  SUB R6, R6, #1
+ 170 013a 5AF826C0 	  LDR R12, [R10, R6, LSL #2]
+ 171 013e 03F10103 	  ADD R3, #1
+ 172 0142 CC44     	  ADD R12, R12, R9
+ 173 0144 DC45     	  CMP R12, R11
+ 174 0146 F0D0     	  BEQ finalFor
+ 175 0148 02E0     	  B   End_Main
+ 176              	endFinalFor:
+ 177 014a 4FF00300 	  MOV R0, #3
+ 178 014e FFE7     	  B   End_Main
+ 179              	  @ End of program ... check your result
+ 180              	
+ 181              	End_Main:
+ 182 0150 7047     	  BX    LR
+ 183              	
+ 184              	  .end...
+DEFINED SYMBOLS
+       ./src/magic.s:8      .text:0000000000000000 Main
+       ./src/magic.s:28     .text:0000000000000000 $t
+       ./src/magic.s:31     .text:000000000000000a whileFirst
+       ./src/magic.s:55     .text:000000000000003c endWhile1
+       ./src/magic.s:35     .text:0000000000000012 startFirstFor
+       ./src/magic.s:51     .text:0000000000000034 endFirstFor
+       ./src/magic.s:39     .text:000000000000001a startSecondFor
+       ./src/magic.s:48     .text:000000000000002e endSecondFor
+       ./src/magic.s:42     .text:000000000000001e startFirstIf
+       ./src/magic.s:59     .text:0000000000000044 afterIf
+       ./src/magic.s:181    .text:0000000000000150 End_Main
+       ./src/magic.s:73     .text:0000000000000066 startRowsWhile
+       ./src/magic.s:95     .text:0000000000000098 endRowsWhile
+       ./src/magic.s:78     .text:0000000000000072 secondRowsWhile
+       ./src/magic.s:87     .text:0000000000000088 endSecondRowsWhile
+       ./src/magic.s:92     .text:0000000000000092 correctIf
+       ./src/magic.s:100    .text:00000000000000a2 startColumnsWhile
+       ./src/magic.s:123    .text:00000000000000da endColumnsWhile
+       ./src/magic.s:105    .text:00000000000000ae secondColumnsWhile
+       ./src/magic.s:115    .text:00000000000000ca endSecondColumnsWhile
+       ./src/magic.s:120    .text:00000000000000d4 correctIf2ElectricBoogaloo
+       ./src/magic.s:130    .text:00000000000000ec startDiagonalWhile
+       ./src/magic.s:150    .text:0000000000000118 endDiagonalWhile
+       ./src/magic.s:137    .text:00000000000000fa skip
+       ./src/magic.s:146    .text:000000000000010e correctIfForDiagonal
+       ./src/magic.s:163    .text:000000000000012a finalFor
+       ./src/magic.s:176    .text:000000000000014a endFinalFor
+       ./src/magic.s:166    .text:000000000000012e finalIf
+
+NO UNDEFINED SYMBOLS
