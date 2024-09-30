@@ -1,0 +1,43 @@
+   1              	# 0 "./src/while.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1470-while//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Translate the pseudocode below into ARM Assembly Language.
+  11              	  @ Assume h is a value in R0.
+  12              	
+  13              	  @ while (h >= 13) {
+  14              	  @ 	h = h - 12;
+  15              	  @ }
+  16              	
+  17              	  @ *** your solution goes here ***
+  18              	
+  19              	WhileLable:
+  20 0000 0D28     	  CMP R0, #13
+  21 0002 02D3     	  BLO EndWhile
+  22 0004 A0F10C00 	  SUB R0, R0, #12
+  23 0008 FAE7     	  B   WhileLable
+  24              	
+  25              	EndWhile:
+  26              	
+  27              	End_Main:
+  28 000a 7047     	  BX    LR
+  29              	
+  30              	  .end...
+DEFINED SYMBOLS
+       ./src/while.s:8      .text:0000000000000000 Main
+       ./src/while.s:19     .text:0000000000000000 WhileLable
+       ./src/while.s:20     .text:0000000000000000 $t
+       ./src/while.s:25     .text:000000000000000a EndWhile
+       ./src/while.s:27     .text:000000000000000a End_Main
+
+NO UNDEFINED SYMBOLS

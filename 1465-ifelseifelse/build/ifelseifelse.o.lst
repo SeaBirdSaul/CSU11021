@@ -1,0 +1,70 @@
+   1              	# 0 "./src/ifelseifelse.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1465-ifelseifelse//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	  
+   6              	  .global  Main
+   7              	
+   8              	Main:
+   9              	
+  10              	  @ Translate the pseudocode below into ARM Assembly Langauge.
+  11              	  @ Assume v is a value in R1 and a is a value in R0.
+  12              	
+  13              	  @ if (v < 10) {
+  14              	  @ 	a = 1;
+  15              	  @ }
+  16              	  @ else if (v < 100) {
+  17              	  @ 	a = 10;
+  18              	  @ }
+  19              	  @ else if (v < 1000) {
+  20              	  @ 	a = 100;
+  21              	  @ }
+  22              	  @ else {
+  23              	  @ 	a = 0;
+  24              	  @ }  
+  25              	
+  26              	  @ *** your solution goes here ***
+  27              	
+  28 0000 0A29     	  CMP R1, #10
+  29 0002 02D2     	  BHS ElseIf
+  30 0004 4FF00100 	  MOV R0, #1
+  31 0008 0DE0     	  B   EndIf
+  32              	
+  33              	ElseIf:
+  34 000a 6429     	  CMP R1, #100
+  35 000c 02D2     	  BHS ElseIfIf
+  36 000e 4FF00A00 	  MOV R0, #10
+  37 0012 08E0     	  B   EndIf
+  38              	
+  39              	ElseIfIf:
+  40 0014 B1F57A7F 	  CMP R1, #1000
+  41 0018 02D2     	  BHS ElseStat
+  42 001a 42F21070 	  MOV R0, #10000
+  43 001e 02E0     	  B   EndIf
+  44              	
+  45              	ElseStat:
+  46 0020 4FF00000 	  MOV R0, #0
+  47 0024 FFE7     	  B   EndIf
+  48              	
+  49              	EndIf:
+  50              	
+  51              	
+  52              	End_Main:
+  53 0026 7047     	  BX    LR
+  54              	
+  55              	  .end...
+DEFINED SYMBOLS
+./src/ifelseifelse.s:8      .text:0000000000000000 Main
+./src/ifelseifelse.s:28     .text:0000000000000000 $t
+./src/ifelseifelse.s:33     .text:000000000000000a ElseIf
+./src/ifelseifelse.s:49     .text:0000000000000026 EndIf
+./src/ifelseifelse.s:39     .text:0000000000000014 ElseIfIf
+./src/ifelseifelse.s:45     .text:0000000000000020 ElseStat
+./src/ifelseifelse.s:52     .text:0000000000000026 End_Main
+
+NO UNDEFINED SYMBOLS

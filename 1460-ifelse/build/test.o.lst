@@ -1,0 +1,28 @@
+   1              	# 0 "./src/test.s"
+   2              	# 1 "C:\\Users\\eogha\\OneDrive\\Desktop\\VS_Code\\CSU11021\\1460-ifelse//"
+   0              	
+   0              	
+   0              	
+   1              	  .syntax unified
+   2              	  .cpu cortex-m3
+   3              	  .fpu softvfp
+   4              	  .thumb
+   5              	
+   6              	  .global  Init_Test
+   7              	
+   8              	  .section  .text
+   9              	  
+  11              	Init_Test:
+  12              	
+  13              	  @ Test with a=6, b=8
+  14 0000 4FF00601 	  MOV   R1, #6
+  15 0004 4FF00802 	  MOV   R2, #8
+  16              	  
+  17 0008 7047     	  bx    lr
+  18              	
+  19              	.end
+DEFINED SYMBOLS
+        ./src/test.s:11     .text:0000000000000000 Init_Test
+        ./src/test.s:14     .text:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS
